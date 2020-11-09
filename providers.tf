@@ -1,20 +1,40 @@
 terraform {
   required_providers {
-    vsphere = {
-      source  = "hashicorp/vsphere"
-      version = "~> 1.24.2"
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 1"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 1"
+    }
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 1"
+    }
+    null = {
+      source  = "hashicorp/null"
+      version = "~> 2"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 2"
+    }
+    template = {
+      source  = "hashicorp/template"
+      version = "~> 2"
     }
   }
 }
 
-provider "vsphere" {
-  # user           = var.vsphere_user
-  # password       = var.vsphere_password
-  # vsphere_server = var.vsphere_server
+provider "kubernetes" {
+  load_config_file       = false
 
-  # # If you have a self-signed cert
-  # allow_unverified_ssl = true
+}
 
-  # Enable debugging
-  # client_debug = true
+provider "helm" {
+  kubernetes {
+    load_config_file       = false
+    
+  }
 }
