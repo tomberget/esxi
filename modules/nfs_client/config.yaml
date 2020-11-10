@@ -1,0 +1,14 @@
+# https://github.com/helm/charts/tree/master/stable/nfs-client-provisioner
+
+storageClass:
+  name: nfs
+  defaultClass: true
+  reclaimPolicy: Retain
+  accessModes: ReadWriteOnce
+
+nfs:
+  server: "192.168.79.9"
+  path: "/mnt/default/kubernetes"
+  mountOptions: 
+    - nfsvers=3
+  
