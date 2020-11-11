@@ -1,0 +1,367 @@
+[
+  {
+      "id": "62e59bd5.81d544",
+      "type": "tab",
+      "label": "Lights",
+      "disabled": false,
+      "info": ""
+  },
+  {
+      "id": "c3231b03.952c78",
+      "type": "inject",
+      "z": "62e59bd5.81d544",
+      "name": "Btwn 21 and 00",
+      "topic": "",
+      "payload": "",
+      "payloadType": "date",
+      "repeat": "",
+      "crontab": "*/10 21-23 * * *",
+      "once": false,
+      "onceDelay": 0.1,
+      "x": 119,
+      "y": 120,
+      "wires": [
+          [
+              "43bfed8a.e54664",
+              "2762ef30.cec0f"
+          ]
+      ]
+  },
+  {
+      "id": "70e2aa3f.2337a4",
+      "type": "debug",
+      "z": "62e59bd5.81d544",
+      "name": "",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "false",
+      "x": 890,
+      "y": 220,
+      "wires": []
+  },
+  {
+      "id": "43bfed8a.e54664",
+      "type": "api-call-service",
+      "z": "62e59bd5.81d544",
+      "name": "All light except GU10 W on 1st floor",
+      "server": "3a715b4d.3eb314",
+      "version": 1,
+      "debugenabled": false,
+      "service_domain": "light",
+      "service": "turn_off",
+      "entityId": "group.lights_most_hallway_2nd",
+      "data": "",
+      "dataType": "json",
+      "mergecontext": "",
+      "output_location": "",
+      "output_location_type": "none",
+      "mustacheAltTags": false,
+      "x": 450,
+      "y": 120,
+      "wires": [
+          [
+              "70e2aa3f.2337a4"
+          ]
+      ]
+  },
+  {
+      "id": "2762ef30.cec0f",
+      "type": "api-current-state",
+      "z": "62e59bd5.81d544",
+      "name": "Check state GU10 W",
+      "server": "3a715b4d.3eb314",
+      "version": 1,
+      "outputs": 2,
+      "halt_if": "on",
+      "halt_if_type": "str",
+      "halt_if_compare": "is",
+      "override_topic": false,
+      "entity_id": "light.tradfri_bulb_gu10_w_400lm",
+      "state_type": "str",
+      "state_location": "payload",
+      "override_payload": "msg",
+      "entity_location": "data",
+      "override_data": "msg",
+      "blockInputOverrides": false,
+      "x": 400,
+      "y": 200,
+      "wires": [
+          [
+              "70e2aa3f.2337a4"
+          ],
+          [
+              "909b57bd.53b518"
+          ]
+      ]
+  },
+  {
+      "id": "909b57bd.53b518",
+      "type": "api-call-service",
+      "z": "62e59bd5.81d544",
+      "name": "Only turn on GU10 W",
+      "server": "3a715b4d.3eb314",
+      "version": 1,
+      "debugenabled": false,
+      "service_domain": "light",
+      "service": "turn_on",
+      "entityId": "light.tradfri_bulb_gu10_w_400lm",
+      "data": "",
+      "dataType": "json",
+      "mergecontext": "",
+      "output_location": "",
+      "output_location_type": "none",
+      "mustacheAltTags": false,
+      "x": 640,
+      "y": 260,
+      "wires": [
+          [
+              "70e2aa3f.2337a4"
+          ]
+      ]
+  },
+  {
+      "id": "4df04c21.f8f1e4",
+      "type": "inject",
+      "z": "62e59bd5.81d544",
+      "name": "At 00:05",
+      "topic": "",
+      "payload": "",
+      "payloadType": "date",
+      "repeat": "",
+      "crontab": "05 00 * * *",
+      "once": false,
+      "onceDelay": 0.1,
+      "x": 100,
+      "y": 360,
+      "wires": [
+          [
+              "b17eab1d.f22cd8"
+          ]
+      ]
+  },
+  {
+      "id": "b17eab1d.f22cd8",
+      "type": "api-call-service",
+      "z": "62e59bd5.81d544",
+      "name": "All lights on 1st floor off",
+      "server": "3a715b4d.3eb314",
+      "version": 1,
+      "debugenabled": false,
+      "service_domain": "light",
+      "service": "turn_off",
+      "entityId": "group.lights_all_2nd",
+      "data": "",
+      "dataType": "json",
+      "mergecontext": "",
+      "output_location": "",
+      "output_location_type": "none",
+      "mustacheAltTags": false,
+      "x": 630,
+      "y": 360,
+      "wires": [
+          [
+              "70e2aa3f.2337a4"
+          ]
+      ]
+  },
+  {
+      "id": "90f8b34e.233d1",
+      "type": "server-state-changed",
+      "z": "62e59bd5.81d544",
+      "name": "Some 1st floor hallway turned on",
+      "server": "3a715b4d.3eb314",
+      "version": 1,
+      "exposeToHomeAssistant": false,
+      "haConfig": [
+          {
+              "property": "name",
+              "value": ""
+          },
+          {
+              "property": "icon",
+              "value": ""
+          }
+      ],
+      "entityidfilter": "bulb_gu10_w(s)?",
+      "entityidfiltertype": "regex",
+      "outputinitially": false,
+      "state_type": "str",
+      "haltifstate": "on",
+      "halt_if_type": "str",
+      "halt_if_compare": "is",
+      "outputs": 2,
+      "output_only_on_state_change": true,
+      "x": 150,
+      "y": 520,
+      "wires": [
+          [
+              "c320f3c6.94bd5"
+          ],
+          [
+              "fdd01573.cf8ac8"
+          ]
+      ]
+  },
+  {
+      "id": "c8678614.e72718",
+      "type": "stoptimer",
+      "z": "62e59bd5.81d544",
+      "duration": "5",
+      "units": "Minute",
+      "payloadtype": "num",
+      "payloadval": "0",
+      "name": "Pause 5min",
+      "x": 630,
+      "y": 474,
+      "wires": [
+          [
+              "c3e48ab7.0cabf8"
+          ],
+          []
+      ]
+  },
+  {
+      "id": "c320f3c6.94bd5",
+      "type": "time-range-switch",
+      "z": "62e59bd5.81d544",
+      "name": "Between 00:05 and 07",
+      "lat": "60.444976",
+      "lon": "5.223831",
+      "startTime": "00:05",
+      "endTime": "07:00",
+      "startOffset": 0,
+      "endOffset": 0,
+      "x": 401,
+      "y": 481,
+      "wires": [
+          [
+              "c8678614.e72718"
+          ],
+          []
+      ]
+  },
+  {
+      "id": "c3e48ab7.0cabf8",
+      "type": "api-call-service",
+      "z": "62e59bd5.81d544",
+      "name": "All lights on 1st floor off",
+      "server": "3a715b4d.3eb314",
+      "version": 1,
+      "debugenabled": false,
+      "service_domain": "light",
+      "service": "turn_off",
+      "entityId": "group.lights_all_2nd",
+      "data": "",
+      "dataType": "json",
+      "mergecontext": "",
+      "output_location": "",
+      "output_location_type": "none",
+      "mustacheAltTags": false,
+      "x": 854,
+      "y": 467,
+      "wires": [
+          [
+              "fdd01573.cf8ac8"
+          ]
+      ]
+  },
+  {
+      "id": "fdd01573.cf8ac8",
+      "type": "debug",
+      "z": "62e59bd5.81d544",
+      "name": "",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "false",
+      "x": 1140,
+      "y": 520,
+      "wires": []
+  },
+  {
+      "id": "3754c337.70721c",
+      "type": "sun events",
+      "z": "62e59bd5.81d544",
+      "testmode": true,
+      "verbose": true,
+      "topic": "",
+      "name": "sunset",
+      "x": 70,
+      "y": 700,
+      "wires": [
+          [
+              "a8a928d6.c53968"
+          ]
+      ]
+  },
+  {
+      "id": "c1ab7632.8daaf8",
+      "type": "api-call-service",
+      "z": "62e59bd5.81d544",
+      "name": "All hallway lights on",
+      "server": "3a715b4d.3eb314",
+      "version": 1,
+      "debugenabled": false,
+      "service_domain": "light",
+      "service": "turn_on",
+      "entityId": "group.lights_all_hallway_2nd",
+      "data": "",
+      "dataType": "json",
+      "mergecontext": "",
+      "output_location": "",
+      "output_location_type": "none",
+      "mustacheAltTags": false,
+      "x": 590,
+      "y": 660,
+      "wires": [
+          [
+              "fd7f52bb.18ce7"
+          ]
+      ]
+  },
+  {
+      "id": "a8a928d6.c53968",
+      "type": "time-range-switch",
+      "z": "62e59bd5.81d544",
+      "name": "Between 15:00 and 20:59",
+      "lat": "60.444976",
+      "lon": "5.223831",
+      "startTime": "15:00",
+      "endTime": "20:59",
+      "startOffset": 0,
+      "endOffset": 0,
+      "x": 330,
+      "y": 700,
+      "wires": [
+          [
+              "c1ab7632.8daaf8"
+          ],
+          [
+              "fd7f52bb.18ce7"
+          ]
+      ]
+  },
+  {
+      "id": "fd7f52bb.18ce7",
+      "type": "debug",
+      "z": "62e59bd5.81d544",
+      "name": "",
+      "active": true,
+      "tosidebar": true,
+      "console": false,
+      "tostatus": false,
+      "complete": "false",
+      "x": 810,
+      "y": 707,
+      "wires": []
+  },
+  {
+      "id": "3a715b4d.3eb314",
+      "type": "server",
+      "z": "",
+      "name": "Home Assistant"
+  }
+]
