@@ -1,0 +1,51 @@
+#https://github.com/k8s-at-home/charts/tree/master/charts/home-assistant
+#helm install --name home-assistant stable/home-assistant
+
+probes:
+  liveness:
+    enabled: true
+  readiness:
+    enabled: true
+  startup:
+    enabled: true
+
+hostNetwork: ${enable_host_network}
+
+service:
+  type: ClusterIP
+  portName: api
+  portProtocol: TCP
+
+persistence:
+  enabled: true
+  size: 5Gi
+  storageClass: local-storage
+  accessMode: ReadWriteOnce
+
+configurator:
+  enabled: false
+  hassApiUrl: http://ha.atarifam.lan/api/
+  hassApiPassword: wratyj69
+  basePath: /config
+  enforceBasePath: true
+  service:
+    type: ClusterIP
+    port: 3128
+    portProtocol: TCP
+
+
+appdaemon:
+  enabled: false
+  haToken: ''
+  service:
+    type: ClusterIP
+    port: 5050
+
+# monitoring:
+#   enabled: true
+#   serviceMonitor:
+#     enbled: true
+#     namespace: default
+#     # interval: 30
+#     labels:
+#       prometheus: "default"
