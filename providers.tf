@@ -28,13 +28,13 @@ terraform {
 }
 
 provider "kubernetes" {
-  load_config_file       = false
+  load_config_file = false
 
 }
 
 provider "helm" {
   kubernetes {
-    load_config_file       = false
-    
+    load_config_file = false
+
   }
 }
