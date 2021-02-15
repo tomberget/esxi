@@ -18,7 +18,11 @@ configInline:
   #     addresses:
   #     - 192.168.79.201-192.168.79.254
 
-  controller:
-    nodeSelector:
-      kubernetes.io/os: linux
-      node-role.kubernetes.io/master: ""
+controller:
+  nodeSelector:
+    kubernetes.io/os: linux
+    node-role.kubernetes.io/master: ""
+
+speaker:
+  nodeSelector:
+    kubernetes.io/os: linux
