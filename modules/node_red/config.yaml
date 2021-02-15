@@ -1,5 +1,3 @@
-#https://artifacthub.io/packages/helm/k8s-at-home/node-red
-
 enableProjects: true
 
 timezone: UTC+1

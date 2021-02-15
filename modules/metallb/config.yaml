@@ -1,0 +1,24 @@
+configInline:
+  # The address-pools section lists the IP addresses that MetalLB is
+  # allowed to allocate, along with settings for how to advertise
+  # those addresses over BGP once assigned. You can have as many
+  # address pools as you want.
+  peers:
+    - peer-address: 192.168.79.1
+      peer-asn: 64501
+      my-asn: 65501
+  address-pools:
+    - name: default
+      protocol: bgp
+      addresses:
+      - 10.20.30.10-10.20.30.250
+  # address-pools:
+  #   - name: metallb
+  #     protocol: layer2
+  #     addresses:
+  #     - 192.168.79.201-192.168.79.254
+
+  controller:
+    nodeSelector:
+      kubernetes.io/os: linux
+      node-role.kubernetes.io/master: ""

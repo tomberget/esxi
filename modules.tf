@@ -1,3 +1,28 @@
+module "metallb" {
+  source = "./modules/metallb"
+
+  metallb_chart_version = "2.3.0"
+  metallb_namespace     = "metallb"
+
+  # Please note that any changes here MUST be followed by commenting out 
+  # nodeSelector and subnodes, and replacing with
+  # nodeName: k8master
+}
+
+module "ingress_nginx" {
+  source = "./modules/ingress_nginx"
+
+  chart_version = "3.23.0"
+  namespace     = "ingress-nginx"
+}
+
+# module "traefik" {
+#   source = "./modules/traefik"
+
+#   traefik_chart_version = "9.11.0"
+#   traefik_namespace     = "traefik"
+# }
+
 # module "monitoring" {
 #   source = "./modules/monitoring"
 
@@ -22,3 +47,10 @@ module "node_red" {
   node_red_chart_version = "3.1.0"
   node_red_namespace     = "node-red"
 }
+
+# module "step_certificates" {
+#   source = "./modules/step_certificates"
+
+#   step_certificates_chart_version = "1.15.5"
+#   step_certificates_namespace = "step-certificates"
+# }
