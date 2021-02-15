@@ -1,6 +1,6 @@
 resource "kubernetes_namespace" "node_red" {
   metadata {
-    name = var.node_red_namespace
+    name = var.namespace
 
     labels = {
       "istio-injection"    = "disabled"
@@ -38,21 +38,22 @@ resource "kubernetes_persistent_volume" "node_red" {
   }
 }
 
-data "template_file" "node_red_config" {
+data "template_file" "config" {
   template = file("${path.root}/modules/node_red/config.yaml")
   vars = {
+    ingress_host = "${var.name}.${var.domain_name}"
   }
 }
 
 resource "helm_release" "node_red" {
-  name       = "node-red"
-  namespace  = kubernetes_namespace.node_red.metadata[0].name
-  repository = "https://k8s-at-home.com/charts/"
-  chart      = "node-red"
-  version    = var.node_red_chart_version
+  name         = var.name
+  namespace    = kubernetes_namespace.node_red.metadata[0].name
+  repository   = "https://k8s-at-home.com/charts/"
+  chart        = var.name
+  version      = var.chart_version
 
   values = [
-    data.template_file.node_red_config.rendered
+    data.template_file.config.rendered
   ]
 
   depends_on = [kubernetes_persistent_volume.node_red]

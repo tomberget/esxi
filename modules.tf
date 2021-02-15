@@ -37,8 +37,10 @@ module "home_assistant" {
 module "node_red" {
   source = "./modules/node_red"
 
-  node_red_chart_version = "3.1.0"
-  node_red_namespace     = "node-red"
+  name          = "node-red"
+  chart_version = "6.0.0"
+  namespace     = "node-red"
+  domain_name   = var.domain_name
 }
 
 # module "step_certificates" {

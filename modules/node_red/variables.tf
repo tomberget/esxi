@@ -1,2 +1,4 @@
-variable "node_red_namespace" {}
-variable "node_red_chart_version" {}
+variable "namespace" {}
+variable "chart_version" {}
+variable "domain_name" {}
+variable "name" {}
