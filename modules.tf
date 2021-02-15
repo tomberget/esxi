@@ -16,13 +16,6 @@ module "ingress_nginx" {
   namespace     = "ingress-nginx"
 }
 
-# module "traefik" {
-#   source = "./modules/traefik"
-
-#   traefik_chart_version = "9.11.0"
-#   traefik_namespace     = "traefik"
-# }
-
 # module "monitoring" {
 #   source = "./modules/monitoring"
 
