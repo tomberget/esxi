@@ -9,6 +9,10 @@ persistence:
     storageClass: local-storage
     accessModes: ReadWriteOnce
 
+service:
+  enabled: true
+  type: ClusterIP
+
 ingress:
   enabled: true
   annotations: 
