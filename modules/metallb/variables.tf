@@ -1,2 +1,3 @@
-variable "metallb_namespace" {}
-variable "metallb_chart_version" {}
+variable "namespace" {}
+variable "chart_version" {}
+variable "chart_name" {}
