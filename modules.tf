@@ -1,51 +1,66 @@
+module "cilium" {
+  source = "./modules/cilium"
+
+  chart_name    = "cilium"
+  chart_version = "1.9.4"
+  namespace     = "kube-system"
+}
+
 module "metallb" {
   source = "./modules/metallb"
 
-  metallb_chart_version = "2.3.0"
-  metallb_namespace     = "metallb"
-
-  # Please note that any changes here MUST be followed by commenting out 
-  # nodeSelector and subnodes, and replacing with
-  # nodeName: k8master
+  chart_name    = "metallb"
+  chart_version = "2.3.0"
+  namespace     = "metallb"
 }
 
-module "ingress_nginx" {
-  source = "./modules/ingress_nginx"
+module "istio_operator" {
+  source = "./modules/istio_operator"
 
-  chart_version = "3.23.0"
-  namespace     = "ingress-nginx"
+  chart_name         = "istio-operator"
+  chart_version      = "2.1.2"
+  operator_namespace = "default"
+  istio_namespace    = "istio-system"
 }
 
-# module "monitoring" {
-#   source = "./modules/monitoring"
+module "kiali_operator" {
+  source = "./modules/kiali_operator"
 
-#   prometheus_operator_chart_version = "10.1.0"
-#   prometheus_namespace              = "monitoring"
+  chart_name    = "kiali-operator"
+  chart_version = "1.30.0"
+  namespace     = "kiali-operator"
+}
 
-#   # ingress_host = var.dns_zone
+# # module "monitoring" {
+# #   source = "./modules/monitoring"
+
+# #   prometheus_operator_chart_version = "10.1.0"
+# #   prometheus_namespace              = "monitoring"
+
+# #   # ingress_host = var.dns_zone
+# # }
+
+# module "home_assistant" {
+#   source = "./modules/home_assistant"
+
+#   home_assistant_chart_version = "2.6.0"
+#   home_assistant_namespace     = "home-assistant"
+
+#   enable_host_network          = true
 # }
 
-module "home_assistant" {
-  source = "./modules/home_assistant"
+# module "node_red" {
+#   source = "./modules/node_red"
 
-  home_assistant_chart_version = "2.6.0"
-  home_assistant_namespace     = "home-assistant"
-
-  enable_host_network          = true
-}
-
-module "node_red" {
-  source = "./modules/node_red"
-
-  name          = "node-red"
-  chart_version = "6.0.0"
-  namespace     = "node-red"
-  domain_name   = var.domain_name
-}
-
-# module "step_certificates" {
-#   source = "./modules/step_certificates"
-
-#   step_certificates_chart_version = "1.15.5"
-#   step_certificates_namespace = "step-certificates"
+#   name          = "node-red"
+#   chart_version = "6.0.0"
+#   namespace     = "node-red"
+#   domain_name   = var.domain_name
 # }
+
+# # module "step_certificates" {
+# #   source = "./modules/step_certificates"
+
+# #   step_certificates_chart_version = "1.15.5"
+# #   step_certificates_namespace = "step-certificates"
+# # }
