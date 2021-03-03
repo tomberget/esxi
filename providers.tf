@@ -2,11 +2,11 @@ terraform {
   required_providers {
     helm = {
       source  = "hashicorp/helm"
-      version = "~> 1"
+      version = ">= 2.0"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 1"
+      version = ">= 2.0"
     }
     local = {
       source  = "hashicorp/local"
@@ -28,13 +28,11 @@ terraform {
 }
 
 provider "kubernetes" {
-  load_config_file = false
 
 }
 
 provider "helm" {
   kubernetes {
-    load_config_file = false
 
   }
 }
