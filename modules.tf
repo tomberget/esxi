@@ -29,6 +29,9 @@ module "kiali_operator" {
   chart_name    = "kiali-operator"
   chart_version = "1.30.0"
   namespace     = "kiali-operator"
+
+  app_name = "kiali"
+  domain   = var.domain
 }
 
 # # module "monitoring" {
