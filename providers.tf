@@ -24,6 +24,10 @@ terraform {
       source  = "hashicorp/template"
       version = "~> 2"
     }
+    kubernetes-alpha = {
+      source = "hashicorp/kubernetes-alpha"
+      version = "~> 0.2"
+    }
   }
 }
 
@@ -35,4 +39,8 @@ provider "helm" {
   kubernetes {
 
   }
+}
+
+provider "kubernetes-alpha" {
+
 }
