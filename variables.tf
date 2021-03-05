@@ -1,3 +1,3 @@
-variable "domain_name" {
+variable "domain" {
   default = "atarifam.lan"
 }
