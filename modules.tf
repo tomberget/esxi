@@ -12,6 +12,8 @@ module "metallb" {
   chart_name    = "metallb"
   chart_version = "2.3.0"
   namespace     = "metallb"
+
+  network_range = var.network_range
 }
 
 module "istio_operator" {
