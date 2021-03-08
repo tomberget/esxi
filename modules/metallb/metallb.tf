@@ -12,7 +12,7 @@ resource "kubernetes_namespace" "metallb" {
 data "template_file" "metallb_config" {
   template = file("${path.root}/modules/metallb/config.yaml")
   vars = {
-
+    network_range = var.network_range
   }
 }
 

@@ -5,23 +5,17 @@ configInline:
   # address pools as you want.
   peers:
     - peer-address: 192.168.79.1
-      peer-asn: 64501
+      peer-asn: 65500
       my-asn: 65501
   address-pools:
     - name: default
       protocol: bgp
       addresses:
-      - 10.20.30.10-10.20.30.250
-  # address-pools:
-  #   - name: metallb
-  #     protocol: layer2
-  #     addresses:
-  #     - 192.168.79.201-192.168.79.254
+      - ${network_range}
 
 controller:
   nodeSelector:
     kubernetes.io/os: linux
-    # node-role.kubernetes.io/master: ""
 
 speaker:
   nodeSelector:
