@@ -6,8 +6,9 @@ rbac:
 
 # If true, create a Prometheus service monitor.
 serviceMonitor:
-  enabled: false
-  additonalLabels: {}
+  enabled: true
+  additonalLabels:
+    prometheus: default
 
 # If Grafana dashboards should be installed for the sidecar to pick up and apply.
 dashboards:
