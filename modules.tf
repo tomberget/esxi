@@ -36,14 +36,14 @@ module "kiali_operator" {
   domain   = var.domain
 }
 
-# # module "monitoring" {
-# #   source = "./modules/monitoring"
+module "monitoring" {
+  source = "./modules/monitoring"
 
-# #   prometheus_operator_chart_version = "10.1.0"
-# #   prometheus_namespace              = "monitoring"
+  prometheus_operator_chart_version = "14.0.0"
+  prometheus_namespace              = "monitoring"
 
-# #   # ingress_host = var.dns_zone
-# # }
+  # ingress_host = var.dns_zone
+}
 
 # module "home_assistant" {
 #   source = "./modules/home_assistant"
@@ -58,7 +58,7 @@ module "kiali_operator" {
 #   source = "./modules/node_red"
 
 #   name          = "node-red"
-#   chart_version = "6.0.0"
+#   chart_version = "6.1.0"
 #   namespace     = "node-red"
 #   domain_name   = var.domain_name
 # }
