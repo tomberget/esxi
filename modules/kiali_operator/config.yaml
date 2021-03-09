@@ -38,3 +38,7 @@ cr:
     deployment:
       accessible_namespaces:
       - '**'
+    external_services:
+      prometheus:
+        url: "http://prometheus-operator-kube-p-prometheus.monitoring.svc.cluster.local:9090"
+        custom_metrics_url: "http://prometheus-operator-kube-p-prometheus.monitoring.svc.cluster.local:9090"
