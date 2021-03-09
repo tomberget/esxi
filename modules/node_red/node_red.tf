@@ -3,7 +3,7 @@ resource "kubernetes_namespace" "node_red" {
     name = var.namespace
 
     labels = {
-      "istio-injection"    = "disabled"
+      "istio-injection"    = "enabled"
       "kiali.io/member-of" = "istio-system"
     }
   }
@@ -41,15 +41,15 @@ resource "kubernetes_persistent_volume" "node_red" {
 data "template_file" "config" {
   template = file("${path.root}/modules/node_red/config.yaml")
   vars = {
-    ingress_host = "${var.name}.${var.domain_name}"
+    
   }
 }
 
 resource "helm_release" "node_red" {
-  name         = var.name
+  name         = var.chart_name
   namespace    = kubernetes_namespace.node_red.metadata[0].name
   repository   = "https://k8s-at-home.com/charts/"
-  chart        = var.name
+  chart        = var.chart_name
   version      = var.chart_version
 
   values = [
@@ -57,4 +57,80 @@ resource "helm_release" "node_red" {
   ]
 
   depends_on = [kubernetes_persistent_volume.node_red]
+}
+
+resource "kubernetes_manifest" "node_red_gateway" {
+  provider = kubernetes-alpha
+
+  manifest = {
+    apiVersion = "networking.istio.io/v1beta1"
+    kind = "Gateway"
+    metadata = {
+      name = "${var.chart_name}-gateway"
+      namespace = kubernetes_namespace.node_red.metadata[0].name
+    }
+    spec = {
+      selector = {
+        istio = "ingressgateway"
+      }
+      servers = [
+        {
+          hosts = [
+            "${var.chart_name}.${var.domain}",
+          ]
+          port = {
+            name = "http"
+            number = 80
+            protocol = "HTTP"
+          }
+        },
+      ]
+    }
+  }
+
+  depends_on = [ helm_release.node_red ]
+}
+
+resource "kubernetes_manifest" "node_red_virtual_service" {
+  provider = kubernetes-alpha
+
+  manifest = {
+    apiVersion = "networking.istio.io/v1beta1"
+    kind = "VirtualService"
+    metadata = {
+      name = var.chart_name
+      namespace = kubernetes_namespace.node_red.metadata[0].name
+    }
+    spec = {
+      gateways = [
+        "${var.chart_name}-gateway",
+      ]
+      hosts = [
+        "${var.chart_name}.${var.domain}",
+      ]
+      http = [
+        {
+          match = [
+            {
+              uri = {
+                prefix = "/"
+              }
+            },
+          ]
+          route = [
+            {
+              destination = {
+                host = "${var.chart_name}.${kubernetes_namespace.node_red.metadata[0].name}.svc.cluster.local"
+                port = {
+                  number = 1880
+                }
+              }
+            },
+          ]
+        },
+      ]
+    }
+  }
+
+  depends_on = [ kubernetes_manifest.node_red_gateway ]
 }

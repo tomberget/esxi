@@ -58,14 +58,14 @@ module "home_assistant" {
   domain   = var.domain
 }
 
-# module "node_red" {
-#   source = "./modules/node_red"
+module "node_red" {
+  source = "./modules/node_red"
 
-#   name          = "node-red"
-#   chart_version = "6.1.0"
-#   namespace     = "node-red"
-#   domain_name   = var.domain_name
-# }
+  chart_name    = "node-red"
+  chart_version = "6.1.0"
+  namespace     = "node-red"
+  domain        = var.domain
+}
 
 # # module "step_certificates" {
 # #   source = "./modules/step_certificates"
