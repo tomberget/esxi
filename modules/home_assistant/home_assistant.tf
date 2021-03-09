@@ -1,9 +1,9 @@
 resource "kubernetes_namespace" "home_assistant" {
   metadata {
-    name = var.home_assistant_namespace
+    name = var.namespace
 
     labels = {
-      "istio-injection"    = "disabled"
+      "istio-injection" = "enabled"
       "kiali.io/member-of" = "istio-system"
     }
   }
@@ -46,15 +46,91 @@ data "template_file" "home_assistant_config" {
 }
 
 resource "helm_release" "home_assistant" {
-  name       = "home-assistant"
+  name       = var.chart_name
   namespace  = kubernetes_namespace.home_assistant.metadata[0].name
   repository = "https://k8s-at-home.com/charts/"
-  chart      = "home-assistant"
-  version    = var.home_assistant_chart_version
+  chart      = var.chart_name
+  version    = var.chart_version
 
   values = [
     data.template_file.home_assistant_config.rendered
   ]
 
   depends_on = [kubernetes_persistent_volume.home_assistant]
+}
+
+resource "kubernetes_manifest" "home_assistant_gateway" {
+  provider = kubernetes-alpha
+
+  manifest = {
+    apiVersion = "networking.istio.io/v1beta1"
+    kind = "Gateway"
+    metadata = {
+      name = "${var.chart_name}-gateway"
+      namespace = kubernetes_namespace.home_assistant.metadata[0].name
+    }
+    spec = {
+      selector = {
+        istio = "ingressgateway"
+      }
+      servers = [
+        {
+          hosts = [
+            "${var.chart_name}.${var.domain}",
+          ]
+          port = {
+            name = "http"
+            number = 80
+            protocol = "HTTP"
+          }
+        },
+      ]
+    }
+  }
+
+  depends_on = [ helm_release.home_assistant ]
+}
+
+resource "kubernetes_manifest" "home_assistant_virtual_service" {
+  provider = kubernetes-alpha
+
+  manifest = {
+    apiVersion = "networking.istio.io/v1beta1"
+    kind = "VirtualService"
+    metadata = {
+      name = var.chart_name
+      namespace = kubernetes_namespace.home_assistant.metadata[0].name
+    }
+    spec = {
+      gateways = [
+        "${var.chart_name}-gateway",
+      ]
+      hosts = [
+        "${var.chart_name}.${var.domain}",
+      ]
+      http = [
+        {
+          match = [
+            {
+              uri = {
+                prefix = "/"
+              }
+            },
+          ]
+          route = [
+            {
+              destination = {
+                host = "${var.chart_name}.${kubernetes_namespace.home_assistant.metadata[0].name}.svc.cluster.local"
+                port = {
+                  number = 8123
+                }
+              }
+            },
+          ]
+        },
+      ]
+    }
+  }
+
+  depends_on = [ kubernetes_manifest.home_assistant_gateway ]
 }

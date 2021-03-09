@@ -45,14 +45,18 @@ module "monitoring" {
   # ingress_host = var.dns_zone
 }
 
-# module "home_assistant" {
-#   source = "./modules/home_assistant"
+module "home_assistant" {
+  source = "./modules/home_assistant"
 
-#   home_assistant_chart_version = "2.6.0"
-#   home_assistant_namespace     = "home-assistant"
+  chart_version = "6.2.0"
+  namespace     = "home-assistant"
+  chart_name    = "home-assistant"
 
-#   enable_host_network          = true
-# }
+  enable_host_network = true
+
+  app_name = "ha"
+  domain   = var.domain
+}
 
 # module "node_red" {
 #   source = "./modules/node_red"

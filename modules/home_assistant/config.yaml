@@ -9,43 +9,40 @@ probes:
   startup:
     enabled: true
 
-hostNetwork: ${enable_host_network}
+env:
+  TZ: "Europe/Oslo"
 
 service:
-  type: ClusterIP
-  portName: api
-  portProtocol: TCP
+  port:
+    port: 8123
+
+# # Enable devices to be discoverable
+# hostNetwork: ${enable_host_network}
+
+# # When hostNetwork is true set dnsPolicy to ClusterFirstWithHostNet
+# dnsPolicy: ClusterFirstWithHostNet
 
 persistence:
-  enabled: true
-  size: 5Gi
-  storageClass: local-storage
-  accessMode: ReadWriteOnce
+  config:
+    enabled: false
+    emptyDir: false
+    # Persistent Volume Storage Class
+    # If defined, storageClassName: <storageClass>
+    # If set to "-", storageClassName: "", which disables dynamic provisioning
+    # If undefined (the default) or set to null, no storageClassName spec is
+    #   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    #   GKE, AWS & OpenStack)
+    storageClass: "local-storage"
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    # Do not delete the pvc upon helm uninstall
+    skipuninstall: false
+    existingClaim: ""
 
-configurator:
-  enabled: false
-  hassApiUrl: http://ha.atarifam.lan/api/
-  hassApiPassword: wratyj69
-  basePath: /config
-  enforceBasePath: true
-  service:
-    type: ClusterIP
-    port: 3128
-    portProtocol: TCP
-
-
-appdaemon:
-  enabled: false
-  haToken: ''
-  service:
-    type: ClusterIP
-    port: 5050
-
-# monitoring:
-#   enabled: true
-#   serviceMonitor:
-#     enbled: true
-#     namespace: default
-#     # interval: 30
-#     labels:
-#       prometheus: "default"
+# Enable a prometheus-operator servicemonitor
+prometheus:
+  serviceMonitor:
+    enabled: false
+    interval: 1m
+    additionalLabels:
+      prometheus: "default"
