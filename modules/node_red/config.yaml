@@ -4,11 +4,13 @@ env:
   TZ: "Europe/Oslo"
 
 persistence:
-  config:
+  data:
     enabled: true
+    emptyDir: false
     size: 3Gi
     storageClass: local-storage
-    accessModes: ReadWriteOnce
+    accessMode: ReadWriteOnce
+    mountpath: /data
 
 service:
   enabled: true
