@@ -67,7 +67,7 @@ resource "kubernetes_manifest" "home_assistant_gateway" {
     kind = "Gateway"
     metadata = {
       name = "${var.chart_name}-gateway"
-      namespace = kubernetes_namespace.home_assistant.metadata[0].name
+      namespace = var.namespace
     }
     spec = {
       selector = {
@@ -99,7 +99,7 @@ resource "kubernetes_manifest" "home_assistant_virtual_service" {
     kind = "VirtualService"
     metadata = {
       name = var.chart_name
-      namespace = kubernetes_namespace.home_assistant.metadata[0].name
+      namespace = var.namespace
     }
     spec = {
       gateways = [
@@ -120,7 +120,7 @@ resource "kubernetes_manifest" "home_assistant_virtual_service" {
           route = [
             {
               destination = {
-                host = "${var.chart_name}.${kubernetes_namespace.home_assistant.metadata[0].name}.svc.cluster.local"
+                host = "${var.chart_name}.${var.namespace}.svc.cluster.local"
                 port = {
                   number = 8123
                 }

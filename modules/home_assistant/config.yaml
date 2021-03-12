@@ -24,7 +24,7 @@ service:
 
 persistence:
   config:
-    enabled: false
+    enabled: true
     emptyDir: false
     # Persistent Volume Storage Class
     # If defined, storageClassName: <storageClass>
@@ -42,7 +42,7 @@ persistence:
 # Enable a prometheus-operator servicemonitor
 prometheus:
   serviceMonitor:
-    enabled: false
+    enabled: true
     interval: 1m
     additionalLabels:
       prometheus: "default"
