@@ -137,6 +137,8 @@ grafana:
     GF_AUTH_ANONYMOUS_ENABLED: "true"
     GF_AUTH_ANONYMOUS_ORG_NAME: ${grafana_org_name}
     GF_AUTH_ANONYMOUS_ORG_ROLE: Editor
+  initChownData:
+    enabled: false
   service:
     type: ClusterIP
   sidecar:

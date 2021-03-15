@@ -44,3 +44,5 @@ provider "helm" {
 provider "kubernetes-alpha" {
 
 }
+
+provider "random" {}
