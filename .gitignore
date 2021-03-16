@@ -1,2 +1,9 @@
+# Do not include terraform files
 .terraform/
 terraform.tfstate*
+
+# Do not include remote-state-create
+remote-state-create
+
+# Do not include the dev.log file
+dev.log
