@@ -3,8 +3,8 @@ resource "kubernetes_namespace" "prometheus" {
     name = var.prometheus_namespace
 
     labels = {
-      # "istio-injection"    = "enabled"
-      # "kiali.io/member-of" = "istio-system"
+      "istio-injection"    = "enabled"
+      "kiali.io/member-of" = "istio-system"
     }
   }
 }

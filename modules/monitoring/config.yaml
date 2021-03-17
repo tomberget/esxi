@@ -65,10 +65,10 @@ prometheusOperator:
       requests:
         cpu: 50m
         memory: 50Mi
-  # admissionWebhooks:
-  #   patch:
-  #     podAnnotations:
-  #       istio-injection: disabled
+  admissionWebhooks:
+    patch:
+      podAnnotations:
+        sidecar.istio.io/inject: "false"
 
 prometheus:
   service:
