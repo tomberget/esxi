@@ -183,7 +183,7 @@ resource "kubernetes_manifest" "prometheus_virtual_service" {
           route = [
             {
               destination = {
-                host = var.prom_app_name
+                host = "prometheus-operator-kube-p-prometheus"
                 port = {
                   number = 9090
                 }
@@ -259,7 +259,7 @@ resource "kubernetes_manifest" "alertmanager_virtual_service" {
           route = [
             {
               destination = {
-                host = var.alrt_app_name
+                host = "prometheus-operator-kube-p-alertmanager"
                 port = {
                   number = 9093
                 }
@@ -335,7 +335,7 @@ resource "kubernetes_manifest" "grafana_virtual_service" {
           route = [
             {
               destination = {
-                host = var.graf_app_name
+                host = "prometheus-operator-grafana"
                 port = {
                   number = 80
                 }
