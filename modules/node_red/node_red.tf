@@ -38,13 +38,6 @@ resource "kubernetes_persistent_volume" "node_red" {
   }
 }
 
-data "template_file" "config" {
-  template = file("${path.root}/modules/node_red/config.yaml")
-  vars = {
-    
-  }
-}
-
 resource "helm_release" "node_red" {
   name         = var.chart_name
   namespace    = kubernetes_namespace.node_red.metadata[0].name
@@ -53,7 +46,9 @@ resource "helm_release" "node_red" {
   version      = var.chart_version
 
   values = [
-    data.template_file.config.rendered
+    templatefile("${path.module}/templates/values.yaml", {
+      
+    })
   ]
 
   depends_on = [kubernetes_persistent_volume.node_red]

@@ -9,13 +9,6 @@ resource "kubernetes_namespace" "metallb" {
   }
 }
 
-data "template_file" "metallb_config" {
-  template = file("${path.root}/modules/metallb/config.yaml")
-  vars = {
-    network_range = var.network_range
-  }
-}
-
 resource "helm_release" "metallb" {
   name       = var.chart_name
   namespace  = kubernetes_namespace.metallb.metadata[0].name
@@ -24,6 +17,8 @@ resource "helm_release" "metallb" {
   version    = var.chart_version
 
   values = [
-    data.template_file.metallb_config.rendered
+    templatefile("${path.module}/templates/values.yaml", {
+      network_range = var.network_range
+    })
   ]
 }

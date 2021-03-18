@@ -105,17 +105,6 @@ resource "random_password" "grafana" {
   override_special = "_%@"
 }
 
-data "template_file" "prometheus_operator_config" {
-  template = file("${path.root}/modules/monitoring/config.yaml")
-  vars = {
-
-    grafana_org_name = var.grafana_org_name
-    grafana_password = random_password.grafana.result
-
-    prometheus_operator_create_crd = true
-  }
-}
-
 resource "helm_release" "prometheus-operator" {
   name       = "prometheus-operator"
   namespace  = kubernetes_namespace.prometheus.metadata[0].name
@@ -124,6 +113,11 @@ resource "helm_release" "prometheus-operator" {
   version    = var.prometheus_operator_chart_version
 
   values = [
-    data.template_file.prometheus_operator_config.rendered
+    templatefile("${path.module}/templates/values.yaml", {
+      grafana_org_name = var.grafana_org_name
+      grafana_password = random_password.grafana.result
+
+      prometheus_operator_create_crd = true
+    })
   ]
 }
