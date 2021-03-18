@@ -1,10 +1,10 @@
 resource "kubernetes_namespace" "prometheus" {
   metadata {
-    name = var.prometheus_namespace
+    name = var.namespace
 
     labels = {
-      "istio-injection"    = "enabled"
-      "kiali.io/member-of" = "istio-system"
+      "istio-injection" = "enabled"
+      "prometheus.io/member-of" = "istio-system"
     }
   }
 }
@@ -105,12 +105,12 @@ resource "random_password" "grafana" {
   override_special = "_%@"
 }
 
-resource "helm_release" "prometheus-operator" {
+resource "helm_release" "prometheus_operator" {
   name       = "prometheus-operator"
   namespace  = kubernetes_namespace.prometheus.metadata[0].name
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "kube-prometheus-stack"
-  version    = var.prometheus_operator_chart_version
+  version    = var.chart_version
 
   values = [
     templatefile("${path.module}/templates/values.yaml", {
@@ -120,4 +120,232 @@ resource "helm_release" "prometheus-operator" {
       prometheus_operator_create_crd = true
     })
   ]
+}
+
+resource "kubernetes_manifest" "prometheus_gateway" {
+  provider = kubernetes-alpha
+
+  manifest = {
+    apiVersion = "networking.istio.io/v1beta1"
+    kind = "Gateway"
+    metadata = {
+      name = "${var.prom_app_name}-gateway"
+      namespace = var.namespace
+    }
+    spec = {
+      selector = {
+        istio = "ingressgateway"
+      }
+      servers = [
+        {
+          hosts = [
+            "${var.prom_app_name}.${var.domain}",
+          ]
+          port = {
+            name = "http"
+            number = 80
+            protocol = "HTTP"
+          }
+        },
+      ]
+    }
+  }
+
+  depends_on = [ helm_release.prometheus_operator ]
+}
+
+resource "kubernetes_manifest" "prometheus_virtual_service" {
+  provider = kubernetes-alpha
+
+  manifest = {
+    apiVersion = "networking.istio.io/v1beta1"
+    kind = "VirtualService"
+    metadata = {
+      name = var.prom_app_name
+      namespace = var.namespace
+    }
+    spec = {
+      gateways = [
+        "${var.prom_app_name}-gateway",
+      ]
+      hosts = [
+        "${var.prom_app_name}.${var.domain}",
+      ]
+      http = [
+        {
+          match = [
+            {
+              uri = {
+                prefix = "/"
+              }
+            },
+          ]
+          route = [
+            {
+              destination = {
+                host = var.prom_app_name
+                port = {
+                  number = 9090
+                }
+              }
+            },
+          ]
+        },
+      ]
+    }
+  }
+
+  depends_on = [ kubernetes_manifest.prometheus_gateway ]
+}
+
+resource "kubernetes_manifest" "alertmanager_gateway" {
+  provider = kubernetes-alpha
+
+  manifest = {
+    apiVersion = "networking.istio.io/v1beta1"
+    kind = "Gateway"
+    metadata = {
+      name = "${var.alrt_app_name}-gateway"
+      namespace = var.namespace
+    }
+    spec = {
+      selector = {
+        istio = "ingressgateway"
+      }
+      servers = [
+        {
+          hosts = [
+            "${var.alrt_app_name}.${var.domain}",
+          ]
+          port = {
+            name = "http"
+            number = 80
+            protocol = "HTTP"
+          }
+        },
+      ]
+    }
+  }
+
+  depends_on = [ helm_release.prometheus_operator ]
+}
+
+resource "kubernetes_manifest" "alertmanager_virtual_service" {
+  provider = kubernetes-alpha
+
+  manifest = {
+    apiVersion = "networking.istio.io/v1beta1"
+    kind = "VirtualService"
+    metadata = {
+      name = var.alrt_app_name
+      namespace = var.namespace
+    }
+    spec = {
+      gateways = [
+        "${var.alrt_app_name}-gateway",
+      ]
+      hosts = [
+        "${var.alrt_app_name}.${var.domain}",
+      ]
+      http = [
+        {
+          match = [
+            {
+              uri = {
+                prefix = "/"
+              }
+            },
+          ]
+          route = [
+            {
+              destination = {
+                host = var.alrt_app_name
+                port = {
+                  number = 9093
+                }
+              }
+            },
+          ]
+        },
+      ]
+    }
+  }
+
+  depends_on = [ kubernetes_manifest.alertmanager_gateway ]
+}
+
+resource "kubernetes_manifest" "grafana_gateway" {
+  provider = kubernetes-alpha
+
+  manifest = {
+    apiVersion = "networking.istio.io/v1beta1"
+    kind = "Gateway"
+    metadata = {
+      name = "${var.graf_app_name}-gateway"
+      namespace = var.namespace
+    }
+    spec = {
+      selector = {
+        istio = "ingressgateway"
+      }
+      servers = [
+        {
+          hosts = [
+            "${var.graf_app_name}.${var.domain}",
+          ]
+          port = {
+            name = "http"
+            number = 80
+            protocol = "HTTP"
+          }
+        },
+      ]
+    }
+  }
+
+  depends_on = [ helm_release.prometheus_operator ]
+}
+
+resource "kubernetes_manifest" "grafana_virtual_service" {
+  provider = kubernetes-alpha
+
+  manifest = {
+    apiVersion = "networking.istio.io/v1beta1"
+    kind = "VirtualService"
+    metadata = {
+      name = var.graf_app_name
+      namespace = var.namespace
+    }
+    spec = {
+      gateways = [
+        "${var.graf_app_name}-gateway",
+      ]
+      hosts = [
+        "${var.graf_app_name}.${var.domain}",
+      ]
+      http = [
+        {
+          match = [
+            {
+              uri = {
+                prefix = "/"
+              }
+            },
+          ]
+          route = [
+            {
+              destination = {
+                host = var.graf_app_name
+                port = {
+                  number = 80
+                }
+              }
+            },
+          ]
+        },
+      ]
+    }
+  }
+
+  depends_on = [ kubernetes_manifest.grafana_gateway ]
 }
