@@ -4,12 +4,6 @@ resource "kubernetes_namespace" "istio_system" {
   }
 }
 
-data "template_file" "istio_operator_config" {
-  template = file("${path.root}/modules/istio_operator/config.yaml")
-  vars = {
-    istio_namespace = kubernetes_namespace.istio_system.metadata.0.name
-  }
-}
 
 resource "helm_release" "istio_operator" {
   name       = var.chart_name
@@ -19,6 +13,8 @@ resource "helm_release" "istio_operator" {
   version    = var.chart_version
 
   values = [
-    data.template_file.istio_operator_config.rendered
+    templatefile("${path.module}/templates/values.yaml", {
+      istio_namespace = kubernetes_namespace.istio_system.metadata.0.name
+    })
   ]
 }
