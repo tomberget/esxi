@@ -38,13 +38,6 @@ resource "kubernetes_persistent_volume" "home_assistant" {
   }
 }
 
-data "template_file" "home_assistant_config" {
-  template = file("${path.root}/modules/home_assistant/config.yaml")
-  vars = {
-    enable_host_network = var.enable_host_network
-  }
-}
-
 resource "helm_release" "home_assistant" {
   name       = var.chart_name
   namespace  = kubernetes_namespace.home_assistant.metadata[0].name
@@ -53,7 +46,9 @@ resource "helm_release" "home_assistant" {
   version    = var.chart_version
 
   values = [
-    data.template_file.home_assistant_config.rendered
+    templatefile("${path.module}/templates/values.yaml", {
+      enable_host_network = var.enable_host_network
+    })
   ]
 
   depends_on = [kubernetes_persistent_volume.home_assistant]
