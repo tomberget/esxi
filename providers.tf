@@ -25,7 +25,7 @@ terraform {
       version = "~> 2"
     }
     kubernetes-alpha = {
-      source = "hashicorp/kubernetes-alpha"
+      source  = "hashicorp/kubernetes-alpha"
       version = "~> 0.2"
     }
   }

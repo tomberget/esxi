@@ -3,5 +3,5 @@ variable "domain" {
 }
 
 variable "network_range" {
-  
+
 }
