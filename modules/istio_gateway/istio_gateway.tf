@@ -44,7 +44,7 @@ resource "kubernetes_manifest" "istio_virtual_service" {
     }
     spec = {
       gateways = [
-        kubernetes_manifest.istio_gateway.manifest.metadata[0].name,
+        kubernetes_manifest.istio_gateway.manifest.metadata.name,
       ]
       hosts = [
         "${var.ingress_name}.${var.ingress_host}",
