@@ -54,78 +54,15 @@ resource "helm_release" "node_red" {
   depends_on = [kubernetes_persistent_volume.node_red]
 }
 
-resource "kubernetes_manifest" "node_red_gateway" {
-  provider = kubernetes-alpha
+module "istio_gateway" {
+  source = "../istio_gateway"
 
-  manifest = {
-    apiVersion = "networking.istio.io/v1beta1"
-    kind = "Gateway"
-    metadata = {
-      name = "${var.chart_name}-gateway"
-      namespace = var.namespace
-    }
-    spec = {
-      selector = {
-        istio = "ingressgateway"
-      }
-      servers = [
-        {
-          hosts = [
-            "${var.chart_name}.${var.domain}",
-          ]
-          port = {
-            name = "http"
-            number = 80
-            protocol = "HTTP"
-          }
-        },
-      ]
-    }
-  }
+  ingress_name = var.chart_name
+  ingress_host = var.domain
+  namespace    = kubernetes_namespace.node_red.metadata[0].name
+  service_port = 1880
 
-  depends_on = [ helm_release.node_red ]
-}
-
-resource "kubernetes_manifest" "node_red_virtual_service" {
-  provider = kubernetes-alpha
-
-  manifest = {
-    apiVersion = "networking.istio.io/v1beta1"
-    kind = "VirtualService"
-    metadata = {
-      name = var.chart_name
-      namespace = var.namespace
-    }
-    spec = {
-      gateways = [
-        "${var.chart_name}-gateway",
-      ]
-      hosts = [
-        "${var.chart_name}.${var.domain}",
-      ]
-      http = [
-        {
-          match = [
-            {
-              uri = {
-                prefix = "/"
-              }
-            },
-          ]
-          route = [
-            {
-              destination = {
-                host = "${var.chart_name}.${var.namespace}.svc.cluster.local"
-                port = {
-                  number = 1880
-                }
-              }
-            },
-          ]
-        },
-      ]
-    }
-  }
-
-  depends_on = [ kubernetes_manifest.node_red_gateway ]
+  depends_on = [
+    helm_release.node_red,
+  ]
 }

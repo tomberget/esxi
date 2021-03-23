@@ -4,6 +4,8 @@ module "cilium" {
   chart_name    = "cilium"
   chart_version = "1.9.4"
   namespace     = "kube-system"
+
+  domain   = var.domain
 }
 
 module "metallb" {
@@ -39,10 +41,10 @@ module "kiali_operator" {
 module "monitoring" {
   source = "./modules/monitoring"
 
-  prometheus_operator_chart_version = "14.0.0"
-  prometheus_namespace              = "monitoring"
+  chart_version = "14.0.0"
+  namespace     = "monitoring"
 
-  # ingress_host = var.dns_zone
+  domain = var.domain
 }
 
 module "home_assistant" {
