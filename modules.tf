@@ -34,8 +34,9 @@ module "kiali_operator" {
   chart_version = "1.30.0"
   namespace     = "kiali-operator"
 
-  app_name = "kiali"
-  domain   = var.domain
+  app_name      = "kiali"
+  app_namespace = "istio-system"
+  domain        = var.domain
 }
 
 module "monitoring" {

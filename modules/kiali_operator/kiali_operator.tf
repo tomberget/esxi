@@ -26,9 +26,9 @@ resource "helm_release" "kiali_operator" {
 module "istio_gateway" {
   source = "../istio_gateway"
 
-  ingress_name = var.chart_name
+  ingress_name = var.app_name
   ingress_host = var.domain
-  namespace    = kubernetes_namespace.kiali_operator.metadata[0].name
+  namespace    = var.app_namespace
   service_port = 20001
 
   depends_on = [
