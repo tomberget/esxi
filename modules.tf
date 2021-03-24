@@ -89,6 +89,16 @@ module "pihole" {
   ]
 }
 
+module "plex" {
+  source = "./modules/plex"
+
+  chart_name    = "plex"
+  chart_version = "2.3.1"
+  namespace     = "plex"
+  app_name      = "plex"
+  domain        = var.domain
+}
+
 # # module "step_certificates" {
 # #   source = "./modules/step_certificates"
 
