@@ -70,6 +70,15 @@ module "node_red" {
   domain        = var.domain
 }
 
+module "pihole" {
+  source = "./modules/pihole"
+
+  chart_name    = "pihole"
+  chart_version = "1.8.34"
+  namespace     = "pihole"
+  domain        = var.domain
+}
+
 # # module "step_certificates" {
 # #   source = "./modules/step_certificates"
 
