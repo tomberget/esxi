@@ -8,33 +8,17 @@ strategyType: RollingUpdate
 maxSurge: 1
 maxUnavailable: 1
 
-dnsHostPort:
-  enabled: false
-  port: 53
+serviceWeb:
+  loadBalancerIP: 172.25.0.2
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pihole-svc
+  type: LoadBalancer
 
 serviceDns:
-  type: ClusterIP
-  externalTrafficPolicy: Local
-  loadBalancerIP: ""
-    # a fixed LoadBalancer IP
-  annotations: {}
-    # metallb.universe.tf/address-pool: network-services
-    # metallb.universe.tf/allow-shared-ip: pihole-svc
-
-serviceWeb:
-  http:
-    enabled: true
-    port: 80
-  https:
-    enabled: true
-    port: 443
-  type: ClusterIP
-  externalTrafficPolicy: Local
-  loadBalancerIP: ""
-    # a fixed LoadBalancer IP
-  annotations: {}
-    # metallb.universe.tf/address-pool: network-services
-    # metallb.universe.tf/allow-shared-ip: pihole-svc
+  loadBalancerIP: 172.25.0.2
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pihole-svc
+  type: LoadBalancer
 
 # virtualHost: pi.hole
 
@@ -81,7 +65,7 @@ resources: {}
 
 persistentVolumeClaim:
   # set to true to use pvc
-  enabled: true
+  enabled: false
   # set to true to use you own pvc
   # existingClaim: myExistingClaim
   annotations: {}
@@ -137,7 +121,9 @@ antiaff:
   strict: true
 
 dnsmasq:
-  upstreamServers: []
+  upstreamServers:
+  - server=/pfsense/192.168.79.1
+  - server=/atarihytta/192.168.80.1
   # Here you can add upstream dns servers with. All lines will be added to the
   # pihole dnsmasq configuration.
   # The format should be like:
@@ -183,10 +169,10 @@ ftl: {}
   # Add values for pihole-FTL.conf
   # MAXDBDAYS: 14
 
-webHttp: "80"
-webHttps: "443"
-hostNetwork: "false"
-privileged: "false"
+# webHttp: "80"
+# webHttps: "443"
+# hostNetwork: "false"
+# privileged: "false"
 
 customVolumes:
   enabled: false
