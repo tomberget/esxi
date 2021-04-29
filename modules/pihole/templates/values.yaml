@@ -2,6 +2,11 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+image:
+  repository: "pihole/pihole"
+  tag: v5.8.1
+  pullPolicy: IfNotPresent
+
 replicaCount: 1
 
 strategyType: RollingUpdate
@@ -65,7 +70,7 @@ resources: {}
 
 persistentVolumeClaim:
   # set to true to use pvc
-  enabled: false
+  enabled: true
   # set to true to use you own pvc
   # existingClaim: myExistingClaim
   annotations: {}
@@ -84,7 +89,7 @@ persistentVolumeClaim:
   ## If subPath is set mount a sub folder of a volume instead of the root of the volume.
   ## This is especially handy for volume plugins that don't natively support sub mounting (like glusterfs).
 
-  ## subPath: "pihole"
+  subPath: "pihole"
 
 nodeSelector: {}
 
@@ -121,9 +126,7 @@ antiaff:
   strict: true
 
 dnsmasq:
-  upstreamServers:
-  - server=/pfsense/192.168.79.1
-  - server=/atarihytta/192.168.80.1
+  upstreamServers: []
   # Here you can add upstream dns servers with. All lines will be added to the
   # pihole dnsmasq configuration.
   # The format should be like:
