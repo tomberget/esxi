@@ -1,0 +1,44 @@
+{{- if .Values.istio.enabled -}}
+{{- $fullName := include "mcserver.fullname" . -}}
+{{- $svcPort := .Values.istio.service.port -}}
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "mcserver.labels" . | nindent 4 }}
+spec:
+  selector:
+    istio: "ingressgateway"
+  servers:
+    {{- range .Values.istio.hosts }}
+    - hosts: {{ .hosts | quote }}
+    {{- end }}
+    port:
+      name = "http"
+      number = 80
+      protocol = "TCP"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "mcserver.labels" . | nindent 4 }}
+spec:
+  gateways:
+    {{ $fullName }}
+  {{- range .Values.istio.hosts }}
+  - hosts:
+    {{ .hosts | quote }}
+  {{- end }}
+  - http:
+    match:
+      uri:
+        prefix: {{ .Values.istio.prefix }}
+    - route:
+      destination:
+        host: {{ include "mcserver.fullname" . }}
+        port:
+          number: {{ $svcPort }}
+{{- end }}
