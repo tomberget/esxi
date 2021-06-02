@@ -22,7 +22,7 @@ module "istio_operator" {
   source = "./modules/istio_operator"
 
   chart_name         = "istio-operator"
-  chart_version      = "2.1.2"
+  chart_version      = "2.2.0"
   operator_namespace = "default"
   istio_namespace    = "istio-system"
 }
