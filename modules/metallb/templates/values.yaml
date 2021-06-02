@@ -16,7 +16,13 @@ configInline:
 controller:
   nodeSelector:
     kubernetes.io/os: linux
+  prometheus:
+    serviceMonitor:
+      enabled: true
 
 speaker:
   nodeSelector:
     kubernetes.io/os: linux
+  prometheus:
+    serviceMonitor:
+      enabled: true

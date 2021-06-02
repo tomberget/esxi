@@ -2,7 +2,7 @@ module "cilium" {
   source = "./modules/cilium"
 
   chart_name    = "cilium"
-  chart_version = "1.9.4"
+  chart_version = "1.10.0"
   namespace     = "kube-system"
 
   domain = var.domain
@@ -12,7 +12,7 @@ module "metallb" {
   source = "./modules/metallb"
 
   chart_name    = "metallb"
-  chart_version = "2.3.0"
+  chart_version = "2.4.0"
   namespace     = "metallb"
 
   network_range = var.network_range
@@ -42,7 +42,7 @@ module "kiali_operator" {
 module "monitoring" {
   source = "./modules/monitoring"
 
-  chart_version = "14.0.0"
+  chart_version = "16.1.2"
   namespace     = "monitoring"
 
   domain = var.domain
@@ -51,7 +51,7 @@ module "monitoring" {
 module "home_assistant" {
   source = "./modules/home_assistant"
 
-  chart_version = "6.2.0"
+  chart_version = "8.3.1"
   namespace     = "home-assistant"
   chart_name    = "home-assistant"
 
@@ -65,7 +65,7 @@ module "node_red" {
   source = "./modules/node_red"
 
   chart_name    = "node-red"
-  chart_version = "6.1.0"
+  chart_version = "7.4.0"
   namespace     = "node-red"
   domain        = var.domain
 }
@@ -74,7 +74,7 @@ module "pihole" {
   source = "./modules/pihole"
 
   chart_name    = "pihole"
-  chart_version = "1.8.34"
+  chart_version = "1.9.1"
   namespace     = "pihole"
   domain        = var.domain
 }
