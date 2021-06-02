@@ -17,7 +17,7 @@ resource "random_password" "pihole" {
 
 resource "kubernetes_secret" "pihole" {
   metadata {
-    name = "password"
+    name      = "password"
     namespace = kubernetes_namespace.pihole.metadata[0].name
   }
 
@@ -36,7 +36,7 @@ resource "kubernetes_persistent_volume" "pihole" {
     capacity = {
       storage = "500Mi"
     }
-    access_modes = ["ReadWriteOnce"]
+    access_modes       = ["ReadWriteOnce"]
     storage_class_name = "local-storage"
     persistent_volume_source {
       local {
@@ -47,9 +47,9 @@ resource "kubernetes_persistent_volume" "pihole" {
       required {
         node_selector_term {
           match_expressions {
-            key = "kubernetes.io/hostname"
+            key      = "kubernetes.io/hostname"
             operator = "In"
-            values = ["k8node1", "k8node2"]
+            values   = ["k8node1", "k8node2"]
           }
         }
       }
@@ -58,11 +58,11 @@ resource "kubernetes_persistent_volume" "pihole" {
 }
 
 resource "helm_release" "pihole" {
-  name         = var.chart_name
-  namespace    = kubernetes_namespace.pihole.metadata[0].name
-  repository   = "https://mojo2600.github.io/pihole-kubernetes/"
-  chart        = var.chart_name
-  version      = var.chart_version
+  name       = var.chart_name
+  namespace  = kubernetes_namespace.pihole.metadata[0].name
+  repository = "https://mojo2600.github.io/pihole-kubernetes/"
+  chart      = var.chart_name
+  version    = var.chart_version
 
   values = [
     templatefile("${path.module}/templates/values.yaml", {

@@ -18,7 +18,7 @@ resource "helm_release" "kiali_operator" {
 
   values = [
     templatefile("${path.module}/templates/values.yaml", {
-      
+
     })
   ]
 }

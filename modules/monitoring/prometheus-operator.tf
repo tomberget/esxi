@@ -3,7 +3,7 @@ resource "kubernetes_namespace" "prometheus" {
     name = var.namespace
 
     labels = {
-      "istio-injection" = "enabled"
+      "istio-injection"         = "enabled"
       "prometheus.io/member-of" = "istio-system"
     }
   }
@@ -18,7 +18,7 @@ resource "kubernetes_persistent_volume" "alertmanager" {
     capacity = {
       storage = "5Gi"
     }
-    access_modes = ["ReadWriteOnce"]
+    access_modes       = ["ReadWriteOnce"]
     storage_class_name = "local-storage"
     persistent_volume_source {
       local {
@@ -29,9 +29,9 @@ resource "kubernetes_persistent_volume" "alertmanager" {
       required {
         node_selector_term {
           match_expressions {
-            key = "kubernetes.io/hostname"
+            key      = "kubernetes.io/hostname"
             operator = "In"
-            values = ["k8node1", "k8node2"]
+            values   = ["k8node1", "k8node2"]
           }
         }
       }
@@ -48,7 +48,7 @@ resource "kubernetes_persistent_volume" "prometheus" {
     capacity = {
       storage = "10Gi"
     }
-    access_modes = ["ReadWriteOnce"]
+    access_modes       = ["ReadWriteOnce"]
     storage_class_name = "local-storage"
     persistent_volume_source {
       local {
@@ -59,9 +59,9 @@ resource "kubernetes_persistent_volume" "prometheus" {
       required {
         node_selector_term {
           match_expressions {
-            key = "kubernetes.io/hostname"
+            key      = "kubernetes.io/hostname"
             operator = "In"
-            values = ["k8node1", "k8node2"]
+            values   = ["k8node1", "k8node2"]
           }
         }
       }
@@ -78,7 +78,7 @@ resource "kubernetes_persistent_volume" "grafana" {
     capacity = {
       storage = "7Gi"
     }
-    access_modes = ["ReadWriteOnce"]
+    access_modes       = ["ReadWriteOnce"]
     storage_class_name = "local-storage"
     persistent_volume_source {
       local {
@@ -89,9 +89,9 @@ resource "kubernetes_persistent_volume" "grafana" {
       required {
         node_selector_term {
           match_expressions {
-            key = "kubernetes.io/hostname"
+            key      = "kubernetes.io/hostname"
             operator = "In"
-            values = ["k8node1", "k8node2"]
+            values   = ["k8node1", "k8node2"]
           }
         }
       }

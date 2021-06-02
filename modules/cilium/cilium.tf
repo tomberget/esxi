@@ -7,7 +7,7 @@ resource "helm_release" "cilium" {
 
   values = [
     templatefile("${path.module}/templates/values.yaml", {
-      
+
     })
   ]
 }

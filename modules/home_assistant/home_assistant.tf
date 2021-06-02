@@ -3,7 +3,7 @@ resource "kubernetes_namespace" "home_assistant" {
     name = var.namespace
 
     labels = {
-      "istio-injection" = "enabled"
+      "istio-injection"    = "enabled"
       "kiali.io/member-of" = "istio-system"
     }
   }
@@ -17,7 +17,7 @@ resource "kubernetes_persistent_volume" "home_assistant" {
     capacity = {
       storage = "5Gi"
     }
-    access_modes = ["ReadWriteOnce"]
+    access_modes       = ["ReadWriteOnce"]
     storage_class_name = "local-storage"
     persistent_volume_source {
       local {
@@ -28,9 +28,9 @@ resource "kubernetes_persistent_volume" "home_assistant" {
       required {
         node_selector_term {
           match_expressions {
-            key = "kubernetes.io/hostname"
+            key      = "kubernetes.io/hostname"
             operator = "In"
-            values = ["k8node1", "k8node2"]
+            values   = ["k8node1", "k8node2"]
           }
         }
       }

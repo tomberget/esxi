@@ -1,5 +1,5 @@
 locals {
-  service_name = var.service_name != "" ?  var.service_name : var.ingress_name
+  service_name = var.service_name != "" ? var.service_name : var.ingress_name
 }
 
 resource "kubernetes_manifest" "istio_gateway" {
@@ -7,9 +7,9 @@ resource "kubernetes_manifest" "istio_gateway" {
 
   manifest = {
     apiVersion = "networking.istio.io/v1beta1"
-    kind = "Gateway"
+    kind       = "Gateway"
     metadata = {
-      name = "${var.ingress_name}-gateway"
+      name      = "${var.ingress_name}-gateway"
       namespace = var.namespace
     }
     spec = {
@@ -22,8 +22,8 @@ resource "kubernetes_manifest" "istio_gateway" {
             "${var.ingress_name}.${var.ingress_host}",
           ]
           port = {
-            name = "http"
-            number = 80
+            name     = "http"
+            number   = 80
             protocol = "HTTP"
           }
         },
@@ -37,9 +37,9 @@ resource "kubernetes_manifest" "istio_virtual_service" {
 
   manifest = {
     apiVersion = "networking.istio.io/v1beta1"
-    kind = "VirtualService"
+    kind       = "VirtualService"
     metadata = {
-      name = var.ingress_name
+      name      = var.ingress_name
       namespace = var.namespace
     }
     spec = {

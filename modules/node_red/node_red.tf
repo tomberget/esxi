@@ -17,7 +17,7 @@ resource "kubernetes_persistent_volume" "node_red" {
     capacity = {
       storage = "3Gi"
     }
-    access_modes = ["ReadWriteOnce"]
+    access_modes       = ["ReadWriteOnce"]
     storage_class_name = "local-storage"
     persistent_volume_source {
       local {
@@ -28,9 +28,9 @@ resource "kubernetes_persistent_volume" "node_red" {
       required {
         node_selector_term {
           match_expressions {
-            key = "kubernetes.io/hostname"
+            key      = "kubernetes.io/hostname"
             operator = "In"
-            values = ["k8node1", "k8node2"]
+            values   = ["k8node1", "k8node2"]
           }
         }
       }
@@ -39,15 +39,15 @@ resource "kubernetes_persistent_volume" "node_red" {
 }
 
 resource "helm_release" "node_red" {
-  name         = var.chart_name
-  namespace    = kubernetes_namespace.node_red.metadata[0].name
-  repository   = "https://k8s-at-home.com/charts/"
-  chart        = var.chart_name
-  version      = var.chart_version
+  name       = var.chart_name
+  namespace  = kubernetes_namespace.node_red.metadata[0].name
+  repository = "https://k8s-at-home.com/charts/"
+  chart      = var.chart_name
+  version    = var.chart_version
 
   values = [
     templatefile("${path.module}/templates/values.yaml", {
-      
+
     })
   ]
 
