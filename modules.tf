@@ -31,7 +31,7 @@ module "kiali_operator" {
   source = "./modules/kiali_operator"
 
   chart_name    = "kiali-operator"
-  chart_version = "1.30.0"
+  chart_version = "1.35.0"
   namespace     = "kiali-operator"
 
   app_name      = "kiali"
