@@ -17,6 +17,6 @@ resource "kubernetes_storage_class" "vsphere" {
   parameters = {
     type = "nfs"
     diskformat = "zeroedthick"
-    datastore = "kubernetes"
+    datastore = data.vsphere_datastore.kubernetes.name
   }
 }
