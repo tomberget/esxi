@@ -16,4 +16,8 @@ resource "vsphere_nas_datastore" "datastore" {
   remote_hosts = ["192.168.79.9"]
   remote_path  = "/mnt/default/kubernetes"
   access_mode  = "readWrite"
+ 
+  lifecycle {
+    ignore_changes = [free_space]
+  }
 }
