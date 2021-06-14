@@ -66,7 +66,8 @@ resource "helm_release" "pihole" {
 
   values = [
     templatefile("${path.module}/templates/values.yaml", {
-      secret_name = kubernetes_secret.pihole.metadata[0].name
+      secret_name       = kubernetes_secret.pihole.metadata[0].name
+      metallb_pihole_ip = var.metallb_pihole_ip
     })
   ]
 

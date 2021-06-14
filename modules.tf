@@ -15,7 +15,7 @@ module "metallb" {
   chart_version = "2.4.0"
   namespace     = "metallb"
 
-  network_range = var.network_range
+  network_range = var.metallb_network_range
 }
 
 module "istio_operator" {
@@ -25,6 +25,10 @@ module "istio_operator" {
   chart_version      = "2.2.0"
   operator_namespace = "default"
   istio_namespace    = "istio-system"
+
+  depends_on = [
+    module.metallb
+  ]
 }
 
 module "kiali_operator" {
@@ -73,10 +77,16 @@ module "node_red" {
 module "pihole" {
   source = "./modules/pihole"
 
-  chart_name    = "pihole"
-  chart_version = "1.9.1"
-  namespace     = "pihole"
-  domain        = var.domain
+  chart_name        = "pihole"
+  chart_version     = "1.9.1"
+  namespace         = "pihole"
+  domain            = var.domain
+  metallb_pihole_ip = cidrhost(var.metallb_network_range, var.metallb_pihole_ip_hostnum)
+
+  depends_on = [
+    module.metallb,
+    resource.kubernetes_storage_class.vsphere
+  ]
 }
 
 # # module "step_certificates" {

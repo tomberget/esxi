@@ -14,13 +14,13 @@ maxSurge: 1
 maxUnavailable: 1
 
 serviceWeb:
-  loadBalancerIP: 172.25.0.2
+  loadBalancerIP: ${metallb_pihole_ip}
   annotations:
     metallb.universe.tf/allow-shared-ip: pihole-svc
   type: LoadBalancer
 
 serviceDns:
-  loadBalancerIP: 172.25.0.2
+  loadBalancerIP: ${metallb_pihole_ip}
   annotations:
     metallb.universe.tf/allow-shared-ip: pihole-svc
   type: LoadBalancer
@@ -113,8 +113,9 @@ extraEnvVarsSecret: {}
   #   key: secret-key
 
 # default upstream DNS servers to use
-DNS1: "8.8.8.8"
-DNS2: "8.8.4.4"
+DNS1: "1.1.1.1"
+DNS2: "8.8.8.8"
+DNS3: "8.8.4.4"
 
 antiaff:
   # set to true to enable antiaffinity (example: 2 pihole DNS in the same cluster)

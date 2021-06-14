@@ -21,6 +21,7 @@ provider "registry.terraform.io/hashicorp/helm" {
   constraints = ">= 2.0.0"
   hashes = [
     "h1:UVuNjmuEM4ZVtItbh1QRGulkBWxDY929roxFQhEf9Ks=",
+    "h1:axFN2JRP+iDo8EAhCfnA3fRUCB5S5x4zCKkivWLNN+Y=",
     "zh:09bd2b6f33a040c3fd59d82c9768b886b8c82163e31ec92dc1b747229d0548df",
     "zh:09f209fa57ad5d01f04c458f1719b42958ca5e0fc2eca63d9ec29f92c77a29f8",
     "zh:0bfc627539500ffb2a41a2f8a5ea7f6fb1d76367b11bbf9489b483b9e8dfff8f",
@@ -39,6 +40,7 @@ provider "registry.terraform.io/hashicorp/kubernetes" {
   version     = "2.3.1"
   constraints = ">= 2.0.0"
   hashes = [
+    "h1:pJmyxuwQSl6FwaOBorStP/I+ZmPXTnarKB/MJOIlIJY=",
     "h1:uIwQjQesidbjSS5kMLh39b7ZEwTbKoxSCT0xbDNpfpA=",
     "zh:05bc0756996f49e8db644b4da63df42a24bfa3fadc5f7bbc3932cb364d0e0310",
     "zh:14c5b75133a1e0bcb100b94eeec37cdadafb85f89f7bd6d3f870cbe023848b31",
@@ -58,6 +60,7 @@ provider "registry.terraform.io/hashicorp/kubernetes-alpha" {
   version     = "0.5.0"
   constraints = "~> 0.2"
   hashes = [
+    "h1:TieK0+Irh7i9nBWEFVQjJeqwyZbHwW54w+Ehc03U0lo=",
     "h1:VazfrrL6rVH4yUuhCVyU/GeXK3fy4HPMyhYtkIjqiso=",
     "zh:30536b0508bb1489286eb78fe96e0f6f9455ef0152a058a1614e1a9699a5afe5",
     "zh:65cf4c26b1e32a4d5ec5a3228b65a378e4d60ac2402d2b2b2ddbb5bdd12e50cb",
@@ -151,5 +154,24 @@ provider "registry.terraform.io/hashicorp/template" {
     "zh:992843002f2db5a11e626b3fc23dc0c87ad3729b3b3cff08e32ffb3df97edbde",
     "zh:ad906f4cebd3ec5e43d5cd6dc8f4c5c9cc3b33d2243c89c5fc18f97f7277b51d",
     "zh:c979425ddb256511137ecd093e23283234da0154b7fa8b21c2687182d9aea8b2",
+  ]
+}
+
+provider "registry.terraform.io/hashicorp/vsphere" {
+  version     = "2.0.1"
+  constraints = "2.0.1"
+  hashes = [
+    "h1:Y+q+DoSj1u6i6Wdn/wda2N+UEJvaIpnftVfEdCFRwJo=",
+    "zh:0262afdc6e929b7de7be330de3556cb754fb3ba389134a097496743733c4ad66",
+    "zh:0fd94409ddc72aefa143bad2e9cee80f82edb9c93b70d4c5a4b875f478413fc1",
+    "zh:140012cb8618bf56da7c05699d9b1610e7d4a29989046cafcd636ab4a1c4ebea",
+    "zh:26e9b583574c2b88a1530b95cd331a35e93377e8c8b5cb81b79aa1cbee835508",
+    "zh:3b0d91191a0f9990f0c91ee1a67e2764ad584df96a67df01d306186e80d4dca6",
+    "zh:65b10ac0192b5054774b3292f59bbd550ebf567aa512cd9400cb2c9a0c7019fb",
+    "zh:69c4807dcb93dbcda0fed712e78704a6ea4fb57e4ff6de3150458cd20e05f4c9",
+    "zh:a4cff51137ceb4e5a69642dbd5ead87957e006cd07695da96bf5676ada987f89",
+    "zh:d2105cc6a37ef8757cfdc31d1d4b2def6ff63032fd2032a30914b0e5974eab06",
+    "zh:d7ea1ffe6a4ded4fcc40bd4237926c6700d06114500bb8fbbeddd7c50b5adbfc",
+    "zh:f1599b1525de74f45069f6655ae0737891d0502229e132cd81d8c717f6825fb0",
   ]
 }

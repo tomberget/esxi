@@ -28,6 +28,10 @@ terraform {
       source  = "hashicorp/kubernetes-alpha"
       version = "~> 0.2"
     }
+    vsphere = {
+      source = "hashicorp/vsphere"
+      version = "2.0.1"
+    }
   }
 }
 
@@ -46,3 +50,12 @@ provider "kubernetes-alpha" {
 }
 
 provider "random" {}
+
+provider "vsphere" {
+  user           = var.vsphere_user
+  password       = var.vsphere_password
+  vsphere_server = var.vsphere_server
+
+  # If you have a self-signed cert
+  allow_unverified_ssl = true
+}
