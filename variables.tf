@@ -14,6 +14,8 @@ variable "metallb_pihole_ip_hostnum" {
 }
 
 # vSphere variables
+variable "esxi_hosts" {}
+
 variable "datacenter_name" {
   type = string
 }
