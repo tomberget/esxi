@@ -1,0 +1,24 @@
+env:
+  TZ: "Europe/Oslo"
+
+controllerService:
+  loadBalancerIp: ${metallb_unifi_controller_ip}
+  type: "LoadBalancer"
+  
+guiService:
+  loadBalancerIp: ${metallb_unifi_gui_ip}
+  type: "LoadBalancer"
+
+discoveryService:
+  loadBalancerIp: ${metallb_unifi_discovery_ip}
+  type: "LoadBalancer"
+
+stunService:
+  loadBalancerIp: ${metallb_unifi_stun_ip}
+  type: "LoadBalancer"
+
+persistence:
+  enabled: true
+  accessMode: "ReadWriteOnce"
+  size: "5Gi"
+  storageClass: "fast"
