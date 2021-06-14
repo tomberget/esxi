@@ -29,7 +29,7 @@ terraform {
       version = "~> 0.2"
     }
     vsphere = {
-      source = "hashicorp/vsphere"
+      source  = "hashicorp/vsphere"
       version = "2.0.1"
     }
   }
