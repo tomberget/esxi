@@ -13,6 +13,23 @@ variable "metallb_pihole_ip_hostnum" {
   type = number
 }
 
+# Unifi variables
+variable "metallb_unifi_gui_ip_hostnum" {
+  type = number
+}
+
+variable "metallb_unifi_controller_ip_hostnum" {
+  type = number
+}
+
+variable "metallb_unifi_discovery_ip_hostnum" {
+  type = number
+}
+
+variable "metallb_unifi_stun_ip_hostnum" {
+  type = number
+}
+
 # vSphere variables
 variable "esxi_hosts" {}
 

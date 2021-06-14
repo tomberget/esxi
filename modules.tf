@@ -89,6 +89,24 @@ module "pihole" {
   ]
 }
 
+module "unifi" {
+  source = "./modules/unifi"
+
+  chart_name                  = "unifi"
+  chart_version               = "2.0.4"
+  namespace                   = "unifi"
+  domain                      = var.domain
+  metallb_unifi_gui_ip        = cidrhost(var.metallb_network_range, var.metallb_unifi_gui_ip_hostnum)
+  metallb_unifi_controller_ip = cidrhost(var.metallb_network_range, var.metallb_unifi_controller_ip_hostnum)
+  metallb_unifi_discovery_ip  = cidrhost(var.metallb_network_range, var.metallb_unifi_discovery_ip_hostnum)
+  metallb_unifi_stun_ip       = cidrhost(var.metallb_network_range, var.metallb_unifi_stun_ip_hostnum)
+
+  depends_on = [
+    module.metallb,
+    resource.kubernetes_storage_class.vsphere
+  ]
+}
+
 # # module "step_certificates" {
 # #   source = "./modules/step_certificates"
 
