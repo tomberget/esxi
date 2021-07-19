@@ -13,19 +13,21 @@
 strategy:
   type: Recreate
 
-env: 
+# -- environment variables. See [plex docs](https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/) for more details.
+# **NOTE:** Plex preference options are camelCase and CASE SENSITIVE!
+# You can do horrible things to your Plex configuration if you are not careful
+# @default -- See below
+env:
+  # -- Set the container timezone
   TZ: "Europe/Oslo"
   # ADVERTISE_IP:
   ALLOWED_NETWORKS:
     - "127.0.0.1"
+    - "192.168.78.0/27"
     - "192.168.79.0/24"
     - "192.168.80.0/24"
 
-  # PLEX_CLAIM:
-  # # NOTE: Plex preference options are camelCase and CASE SENSITIVE!
-  # # You can do horrible things to your Plex configuration if you are not careful
-  # # See a full list at https://support.plex.tv/articles/201105343-advanced-hidden-server-settings/
-  PLEX_PREFERENCE_1: "FriendlyName=k8s@home"
+  PLEX_PREFERENCE_1: "FriendlyName=plex@k8s"
   # PLEX_PREFERENCE_2: "EnableIPv6=0"
   # PLEX_PREFERENCE_3: "logDebug=0"
   # PLEX_PREFERENCE_4: "DisableTLSv1_0=1"
@@ -34,34 +36,43 @@ env:
   # PLEX_PREFERENCE_7: "TreatWanIpAsLocal=0"
   # PLEX_PREFERENCE_8: "TranscoderH264BackgroundPreset=fast"
 
+# -- Configures service settings for the chart.
+# @default -- See values.yaml
 service:
-  port:
-    port: 32400
-  # additionalServices:
-  # - enabled: true
-  #   nameSuffix: dnla-tcp
-  #   type: NodePort
-  #   port:
-  #     port: 32469
-  #     name: dnla-tcp
-  #     protocol: TCP
-  #     targetPort: 32469
-  #   externalTrafficPolicy: Local
-  # - enabled: true
-  #   nameSuffix: dnla-udp
-  #   type: NodePort
-  #   port:
-  #     port: 1900
-  #     name: dnla-udp
-  #     protocol: UDP
-  #     targetPort: 1900
-  #   externalTrafficPolicy: Local
+  main:
+    primary: true
+    ports:
+      http:
+        port: 32400
+  dnla-tcp:
+    enabled: false
+    type: NodePort
+    ports:
+      dnla-tcp:
+        enabled: true
+        port: 32469
+        protocol: TCP
+        targetPort: 32469
+    externalTrafficPolicy: Local
+  dnla-udp:
+    enabled: false
+    type: NodePort
+    ports:
+      dnla-udp:
+        enabled: true
+        port: 1900
+        protocol: TCP
+        targetPort: 1900
+    externalTrafficPolicy: Local
 
 ingress:
-  enabled: false
+  # -- Enable and configure ingress settings for the chart under this key.
+  # @default -- See values.yaml
+  main:
+    enabled: false
 
 # -- Enable devices to be discoverable
-hostNetwork: true
+hostNetwork: false
 
 persistence:
   config:
@@ -102,38 +113,40 @@ persistence:
 
 
 # Mount a folder on the host directly to the containers
-hostPathMounts:
-  - name: "movies"
-    enabled: true
-    emptyDir: false
-    mountPath: "/mnt"
-    subPath: "movies"
-    hostPath: "/mnt/kubeshare/plex/movies"
-    readOnly: false
+# hostPathMounts:
+#   - name: "movies"
+#     enabled: true
+#     emptyDir: false
+#     mountPath: "/mnt"
+#     subPath: "movies"
+#     hostPath: "/mnt/kubeshare/plex/movies"
+#     readOnly: false
 
-# podSecurityContext:
-#   runAsUser: 568
-#   runAsGroup: 568
-#   fsGroup: 568
-#   # Hardware acceleration using an Intel iGPU w/ QuickSync
-#   # These IDs below should be matched to your `video` and `render` group on the host
-#   # To obtain those IDs run the following grep statement on the host:
-#   # $ cat /etc/group | grep "video\|render"
-#   # video:x:44:
-#   # render:x:109:
-#   supplementalGroups:
-#   - 44
-#   - 109
+# -- Configure the Security Context for the Pod
+podSecurityContext: {}
+  # runAsUser: 568
+  # runAsGroup: 568
+  # fsGroup: 568
+  # # Hardware acceleration using an Intel iGPU w/ QuickSync
+  # # These IDs below should be matched to your `video` and `render` group on the host
+  # # To obtain those IDs run the following grep statement on the host:
+  # # $ cat /etc/group | grep "video\|render"
+  # # video:x:44:
+  # # render:x:109:
+  # supplementalGroups:
+  # - 44
+  # - 109
 
-# resources:
-#   requests:
-#     # Hardware acceleration using an Intel iGPU w/ QuickSync and
-#     # using intel-gpu-plugin (https://github.com/intel/intel-device-plugins-for-kubernetes)
-#     gpu.intel.com/i915: 1
-#     cpu: 200m
-#     memory: 256Mi
-#   limits:
-#     # Hardware acceleration using an Intel iGPU w/ QuickSync and
-#     # using intel-gpu-plugin (https://github.com/intel/intel-device-plugins-for-kubernetes)
-#     gpu.intel.com/i915: 1
-#     memory: 4096Mi
+# -- Configure the resource requests and/or limits for the Pod
+resources: {}
+  # requests:
+  #   # Hardware acceleration using an Intel iGPU w/ QuickSync and
+  #   # using intel-gpu-plugin (https://github.com/intel/intel-device-plugins-for-kubernetes)
+  #   gpu.intel.com/i915: 1
+  #   cpu: 200m
+  #   memory: 256Mi
+  # limits:
+  #   # Hardware acceleration using an Intel iGPU w/ QuickSync and
+  #   # using intel-gpu-plugin (https://github.com/intel/intel-device-plugins-for-kubernetes)
+  #   gpu.intel.com/i915: 1
+  #   memory: 4096Mi

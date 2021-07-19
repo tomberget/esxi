@@ -93,7 +93,7 @@ module "plex" {
   source = "./modules/plex"
 
   chart_name    = "plex"
-  chart_version = "4.3.1"
+  chart_version = "5.3.0"
   namespace     = "plex"
   app_name      = "plex"
   domain        = var.domain
