@@ -28,14 +28,3 @@ variable "datastore_name" {
 }
 
 # Enable features
-variable "istio_enable" {
-  type = bool
-  description = "Enable or disable Istio"
-  default = false
-}
-
-variable "kiali_enable" {
-  type = bool
-  description = "Enable or disable kiali"
-  default = false
-}

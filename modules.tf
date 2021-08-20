@@ -18,35 +18,6 @@ module "metallb" {
   network_range = var.metallb_network_range
 }
 
-module "istio_operator" {
-  count = var.istio_enable ? 1 : 0
-
-  source = "./modules/istio_operator"
-
-  chart_name         = "istio-operator"
-  chart_version      = "2.2.0"
-  operator_namespace = "default"
-  istio_namespace    = "istio-system"
-
-  depends_on = [
-    module.metallb
-  ]
-}
-
-module "kiali_operator" {
-  count = var.istio_enable && var.kiali_enable ? 1 : 0
-
-  source = "./modules/kiali_operator"
-
-  chart_name    = "kiali-operator"
-  chart_version = "1.35.0"
-  namespace     = "kiali-operator"
-
-  app_name      = "kiali"
-  app_namespace = "istio-system"
-  domain        = var.domain
-}
-
 module "monitoring" {
   source = "./modules/monitoring"
 
