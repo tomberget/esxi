@@ -1,11 +1,6 @@
 resource "kubernetes_namespace" "node_red" {
   metadata {
     name = var.namespace
-
-    labels = {
-      "istio-injection"    = "enabled"
-      "kiali.io/member-of" = "istio-system"
-    }
   }
 }
 
@@ -52,17 +47,4 @@ resource "helm_release" "node_red" {
   ]
 
   depends_on = [kubernetes_persistent_volume.node_red]
-}
-
-module "istio_gateway" {
-  source = "../istio_gateway"
-
-  ingress_name = var.chart_name
-  ingress_host = var.domain
-  namespace    = kubernetes_namespace.node_red.metadata[0].name
-  service_port = 1880
-
-  depends_on = [
-    helm_release.node_red,
-  ]
 }

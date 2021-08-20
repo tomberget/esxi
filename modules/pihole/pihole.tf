@@ -73,16 +73,3 @@ resource "helm_release" "pihole" {
 
   depends_on = [kubernetes_persistent_volume.pihole]
 }
-
-# module "istio_gateway" {
-#   source = "../istio_gateway"
-
-#   ingress_name = var.chart_name
-#   ingress_host = var.domain
-#   namespace    = kubernetes_namespace.pihole.metadata[0].name
-#   service_port = 80
-
-#   depends_on = [
-#     helm_release.pihole,
-#   ]
-# }
