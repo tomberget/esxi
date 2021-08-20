@@ -49,6 +49,19 @@ module "node_red" {
   domain        = var.domain
 }
 
+module "traefik" {
+  source = "./modules/traefik"
+
+  chart_name    = "traefik"
+  chart_version = "10.3.1"
+  namespace     = "traefik"
+  metallb_traefik_ip = cidrhost(var.metallb_network_range, var.metallb_traefik_ip_hostnum)
+
+  depends_on = [
+    module.metallb
+  ]
+}
+
 module "pihole" {
   source = "./modules/pihole"
 
