@@ -24,29 +24,26 @@ terraform {
       source  = "hashicorp/template"
       version = "~> 2"
     }
-    kubernetes-alpha = {
-      source  = "hashicorp/kubernetes-alpha"
-      version = "~> 0.2"
-    }
+
     vsphere = {
       source  = "hashicorp/vsphere"
       version = "2.0.1"
     }
   }
+
+  required_version = "~> 1.0.0"
 }
 
 provider "kubernetes" {
-
+  experiments {
+    manifest_resource = true
+  }
 }
 
 provider "helm" {
   kubernetes {
 
   }
-}
-
-provider "kubernetes-alpha" {
-
 }
 
 provider "random" {}

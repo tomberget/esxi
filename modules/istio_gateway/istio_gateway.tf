@@ -3,8 +3,6 @@ locals {
 }
 
 resource "kubernetes_manifest" "istio_gateway" {
-  provider = kubernetes-alpha
-
   manifest = {
     apiVersion = "networking.istio.io/v1beta1"
     kind       = "Gateway"
@@ -33,8 +31,6 @@ resource "kubernetes_manifest" "istio_gateway" {
 }
 
 resource "kubernetes_manifest" "istio_virtual_service" {
-  provider = kubernetes-alpha
-
   manifest = {
     apiVersion = "networking.istio.io/v1beta1"
     kind       = "VirtualService"

@@ -11,7 +11,7 @@ variable "metallb_network_range" {
 # MetalLB variables
 variable "metallb_pihole_ip_hostnum" {
   default = 1
-  type = number
+  type    = number
 }
 
 # vSphere variables

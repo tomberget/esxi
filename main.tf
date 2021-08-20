@@ -15,8 +15,8 @@ resource "kubernetes_storage_class" "vsphere" {
   reclaim_policy      = "Retain"
   volume_binding_mode = "WaitForFirstConsumer"
   parameters = {
-    diskformat = "zeroedthick"
+    diskformat        = "zeroedthick"
     storagePolicyName = "gold"
-    datastore  = vsphere_nas_datastore.datastore.name
+    datastore         = vsphere_nas_datastore.datastore.name
   }
 }
