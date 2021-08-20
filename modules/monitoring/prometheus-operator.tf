@@ -1,11 +1,6 @@
 resource "kubernetes_namespace" "prometheus" {
   metadata {
     name = var.namespace
-
-    labels = {
-      "istio-injection"         = "enabled"
-      "prometheus.io/member-of" = "istio-system"
-    }
   }
 }
 
