@@ -2,10 +2,7 @@ resource "kubernetes_namespace" "metallb" {
   metadata {
     name = var.namespace
 
-    labels = {
-      "istio-injection"    = "enabled"
-      "kiali.io/member-of" = "istio-system"
-    }
+    
   }
 }
 

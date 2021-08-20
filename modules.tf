@@ -19,6 +19,8 @@ module "metallb" {
 }
 
 module "istio_operator" {
+  count = var.istio_enable ? 1 : 0
+
   source = "./modules/istio_operator"
 
   chart_name         = "istio-operator"
@@ -32,6 +34,8 @@ module "istio_operator" {
 }
 
 module "kiali_operator" {
+  count = var.istio_enable && var.kiali_enable ? 1 : 0
+
   source = "./modules/kiali_operator"
 
   chart_name    = "kiali-operator"

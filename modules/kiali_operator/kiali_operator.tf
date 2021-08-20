@@ -1,11 +1,6 @@
 resource "kubernetes_namespace" "kiali_operator" {
   metadata {
     name = var.namespace
-
-    labels = {
-      "istio-injection"    = "enabled"
-      "kiali.io/member-of" = "istio-system"
-    }
   }
 }
 

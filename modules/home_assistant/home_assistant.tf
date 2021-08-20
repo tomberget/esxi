@@ -1,11 +1,6 @@
 resource "kubernetes_namespace" "home_assistant" {
   metadata {
     name = var.namespace
-
-    labels = {
-      "istio-injection"    = "enabled"
-      "kiali.io/member-of" = "istio-system"
-    }
   }
 }
 
@@ -52,17 +47,4 @@ resource "helm_release" "home_assistant" {
   ]
 
   depends_on = [kubernetes_persistent_volume.home_assistant]
-}
-
-module "istio_gateway" {
-  source = "../istio_gateway"
-
-  ingress_name = var.chart_name
-  ingress_host = var.domain
-  namespace    = kubernetes_namespace.home_assistant.metadata[0].name
-  service_port = 8123
-
-  depends_on = [
-    helm_release.home_assistant,
-  ]
 }
