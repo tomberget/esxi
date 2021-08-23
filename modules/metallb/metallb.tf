@@ -1,8 +1,6 @@
 resource "kubernetes_namespace" "metallb" {
   metadata {
     name = var.namespace
-
-    
   }
 }
 
