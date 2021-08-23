@@ -249,7 +249,7 @@ ports:
     # You SHOULD NOT expose the traefik port on production deployments.
     # If you want to access it from outside of your cluster,
     # use `kubectl port-forward` or create a secure ingress
-    expose: false
+    expose: true
     # The exposed port for this service
     exposedPort: 9000
     # The port protocol (TCP/UDP)
@@ -382,7 +382,7 @@ hostNetwork: false
 
 # Whether Role Based Access Control objects like roles and rolebindings should be created
 rbac:
-  enabled: false
+  enabled: true
 
   # If set to false, installs ClusterRole and ClusterRoleBinding so Traefik can be used across namespaces.
   # If set to true, installs namespace-specific Role and RoleBinding and requires provider configuration be set to that same namespace

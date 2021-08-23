@@ -48,3 +48,32 @@ resource "helm_release" "home_assistant" {
 
   depends_on = [kubernetes_persistent_volume.home_assistant]
 }
+
+resource "kubernetes_manifest" "traefik_ingress_route" {
+  manifest = {
+    apiVersion = "traefik.containo.us/v1alpha1"
+    kind       = "IngressRoute"
+    metadata = {
+      name      = "${var.chart_name}-ingressroute"
+      namespace = kubernetes_namespace.home_assistant.metadata[0].name
+    }
+
+    spec = {
+      entryPoints = [
+        "web", 
+      ]
+      routes = [
+        {
+          kind     = "Rule"
+          match    = "Host(`${var.chart_name}.${var.domain}`)"
+          services = [
+            {
+              name           = var.chart_name
+              port           = "http"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
