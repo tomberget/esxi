@@ -30,7 +30,7 @@ module "monitoring" {
 module "home_assistant" {
   source = "./modules/home_assistant"
 
-  chart_version = "8.3.1"
+  chart_version = "10.0.0"
   namespace     = "home-assistant"
   chart_name    = "home-assistant"
 
