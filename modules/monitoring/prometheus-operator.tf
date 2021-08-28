@@ -116,3 +116,19 @@ resource "helm_release" "prometheus_operator" {
     })
   ]
 }
+
+module "ingress_routes" {
+  source = "../traefik_ingress_route"
+
+  for_each = var.ingress_route_list
+
+  name         = each.key
+  service_name = each.value["service_name"]
+  namespace    = var.namespace
+  route_match  = "Host(`${each.key}.${var.domain}`) && PathPrefix(`/`)"
+  service_port = each.value["port_name"]
+
+  depends_on = [
+    resource.helm_release.prometheus_operator,
+  ]
+}
