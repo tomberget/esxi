@@ -17,15 +17,15 @@ resource "kubernetes_manifest" "ingress_route" {
           match = var.route_match
           services = [
             {
-              kind = var.service_kind
-              name = var.service_name
-              namespace = var.namespace
+              kind           = var.service_kind
+              name           = var.service_name
+              namespace      = var.namespace
               passHostHeader = var.service_pass_host_header
               responseForwarding = {
                 flushInterval = var.service_responseForwarding_flushInterval
               }
               scheme = var.service_scheme
-              port = var.service_port
+              port   = var.service_port
             }
           ]
         }

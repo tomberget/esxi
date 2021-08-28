@@ -11,3 +11,12 @@ resource "helm_release" "cilium" {
     })
   ]
 }
+
+module "ingress_route" {
+  source = "../traefik_ingress_route"
+
+  service_name = "hubble-ui"
+  namespace    = var.namespace
+  route_match  = "Host(`hubble.${var.domain}`) && PathPrefix(`/`)"
+  service_port = "http"
+}
