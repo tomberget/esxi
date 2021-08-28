@@ -1,5 +1,5 @@
-variable "service_name" {
-  description = "Name used for service name"
+variable "name" {
+  description = "Name used for IngressRoute"
   type        = string
 }
 
@@ -16,6 +16,11 @@ variable "route_kind" {
 
 variable "route_match" {
   description = "Route matching"
+  type        = string
+}
+
+variable "service_name" {
+  description = "Name used for service name"
   type        = string
 }
 

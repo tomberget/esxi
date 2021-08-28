@@ -52,6 +52,7 @@ resource "helm_release" "home_assistant" {
 module "traefik_ingress_route" {
   source = "../traefik_ingress_route"
 
+  name         = var.chart_name
   service_name = var.chart_name
   namespace    = kubernetes_namespace.home_assistant.metadata[0].name
   route_match  = "Host(`${var.chart_name}.${var.domain}`) && PathPrefix(`/`)"

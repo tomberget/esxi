@@ -3,7 +3,7 @@ resource "kubernetes_manifest" "ingress_route" {
     apiVersion = "traefik.containo.us/v1alpha1"
     kind       = "IngressRoute"
     metadata = {
-      name      = "${var.service_name}-ingressroute"
+      name      = "${var.name}-ingressroute"
       namespace = var.namespace
     }
 
