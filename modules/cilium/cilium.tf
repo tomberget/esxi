@@ -20,4 +20,8 @@ module "ingress_route" {
   namespace    = var.namespace
   route_match  = "Host(`hubble.${var.domain}`) && PathPrefix(`/`)"
   service_port = "http"
+
+  depends_on = [
+    helm_release.cilium
+  ]
 }

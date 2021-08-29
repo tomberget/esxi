@@ -48,3 +48,17 @@ resource "helm_release" "node_red" {
 
   depends_on = [kubernetes_persistent_volume.node_red]
 }
+
+module "ingress_route" {
+  source = "../traefik_ingress_route"
+
+  name         = var.chart_name
+  service_name = var.chart_name
+  namespace    = var.namespace
+  route_match  = "Host(`${var.chart_name}.${var.domain}`) && PathPrefix(`/`)"
+  service_port = "http"
+
+  depends_on = [
+    helm_release.node_red
+  ]
+}

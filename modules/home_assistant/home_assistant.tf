@@ -57,4 +57,8 @@ module "traefik_ingress_route" {
   namespace    = kubernetes_namespace.home_assistant.metadata[0].name
   route_match  = "Host(`${var.chart_name}.${var.domain}`) && PathPrefix(`/`)"
   service_port = "http"
+
+  depends_on = [
+    helm_release.home_assistant
+  ]
 }
