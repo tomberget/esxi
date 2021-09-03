@@ -31,21 +31,3 @@ variable "datacenter_name" {
 variable "datastore_name" {
   type = string
 }
-
-# Enable features
-
-#
-variable "namespaces" {
-  description = "List of all namespaces in use"
-  type = list(string)
-  default = [
-    "default",
-    "home-assistant",
-    "kube-system",
-    "metallb",
-    "monitoring",
-    "node-red",
-    "pihole",
-    "traefik",
-  ]
-}

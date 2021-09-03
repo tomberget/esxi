@@ -1,8 +1,6 @@
-module "cilium_network_policies" {
-  source = "github.com/evry-ace/tf-cilium-network-policies.git?ref=v1.0.1"
-  count = length(var.namespaces)
+module "cilium_network_policy" {
+  source = "github.com/evry-ace/tf-cilium-network-policies.git?ref=v1.0.2"
 
-  default_cilium_network_policies_enabled = true
-  namespace                               = var.namespaces[count.index]
+  enable_dns_visibility = true
 
 }

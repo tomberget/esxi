@@ -33,6 +33,17 @@ resource "kubernetes_persistent_volume" "home_assistant" {
   }
 }
 
+# resource "kubernetes_config_map" "example" {
+#   metadata {
+#     name = "configuration"
+#     namespace = kubernetes_namespace.home_assistant.metadata[0].name
+#   }
+
+#   data = {
+#     "configuration.yml" = "${file("${path.module}/configs/configuration.yaml")}"
+#   }
+# }
+
 resource "helm_release" "home_assistant" {
   name       = var.chart_name
   namespace  = kubernetes_namespace.home_assistant.metadata[0].name
