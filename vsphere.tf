@@ -18,6 +18,6 @@ resource "vsphere_nas_datastore" "datastore" {
   access_mode  = "readWrite"
 
   lifecycle {
-    ignore_changes = [free_space]
+    ignore_changes = [free_space, capacity]
   }
 }
