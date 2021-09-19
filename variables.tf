@@ -68,25 +68,6 @@ variable "sonar_helm_chart" {
       official         = "true"
     },
   }
-
-}
-
-variable "sonar_chart_repository" {
-  description = "The chart repository used for SonarQube."
-  type        = string
-  default     = "https://oteemo.github.io/charts"
-}
-
-variable "sonar_chart_version" {
-  description = "The Helm chart version used for sonar."
-  type        = string
-  default     = "9.6.5"
-}
-
-variable "sonar_image_tag" {
-  description = "Set the SonarQube image tag. Must be overridden in TFvars, as the default is always a -community image."
-  type        = string
-  default     = "8.9.2-community"
 }
 
 variable "sonar_ldap_bind_password" {
