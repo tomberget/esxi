@@ -42,3 +42,8 @@ variable "sonar_ingress_host" {
   description = "The ingress host where sonar will be made available."
   type        = string
 }
+
+variable "sonar_reference_key" {
+  description = "The variable reference key from the Helm chart variable."
+  type        = string
+}

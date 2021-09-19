@@ -85,6 +85,7 @@ module "sonarqube_helm_chart" {
   sonar_image_tag          = each.value.image_tag
   sonar_ldap_bind_password = var.sonar_ldap_bind_password
   sonar_ingress_host       = var.sonar_ingress_host
+  sonar_reference_key      = each.key
 
   depends_on = [
     kubernetes_persistent_volume.sonar_postgresql,
