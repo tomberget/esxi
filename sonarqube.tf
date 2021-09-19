@@ -78,6 +78,7 @@ module "sonarqube_helm_chart" {
 
   source                   = "./modules/sonarqube"
   sonar_enabled            = var.sonar_enabled
+  sonar_official           = tobool(each.value.official)
   sonar_namespace          = kubernetes_namespace.sonar.metadata.0.name
   sonar_chart_repository   = each.value.chart_repository
   sonar_chart_version      = each.value.chart_version

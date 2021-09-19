@@ -4,6 +4,12 @@ variable "sonar_enabled" {
   default     = false
 }
 
+variable "sonar_official" {
+  description = "Use the oteemo (false) or the offical (true) chart."
+  type        = bool
+  default     = true
+}
+
 variable "sonar_namespace" {
   description = "SonarQube namespace."
   type        = string
