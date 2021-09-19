@@ -48,7 +48,7 @@ variable "sonar_namespace" {
 variable "sonar_enable_official" {
   description = "Use oteemo (false) or official (true)."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "sonar_helm_chart" {

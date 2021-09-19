@@ -1,5 +1,5 @@
 resource "helm_release" "sonarqube" {
-  count = var.sonar_enabled ? 1 : 0 && var.sonar_official ? 0 : 1
+  count = var.sonar_enabled ? 1 : 0
 
   name       = "sonarqube"
   repository = var.sonar_chart_repository
