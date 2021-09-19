@@ -1,0 +1,39 @@
+image:
+  tag: ${image_tag}
+
+deploymentStrategy:
+  type: Recreate
+
+ingress:
+  enabled: true
+  hosts:
+    - name: ${sonar_ingress_host}
+  annotations:
+    kubernetes.io/ingress.class: traefik
+
+initFs:
+  enabled: false
+
+prometheusExporter:
+  enabled: true
+
+resources:
+  limits:
+    cpu: 800m
+    memory: 4Gi
+  requests:
+    cpu: 400m
+    memory: 2Gi
+
+persistence:
+  enabled: true
+  storageClass: "local-storage"
+  size: 10Gi
+  accessMode: ReadWriteOnce
+
+postgresql:
+  persistence:
+    storageClass: "local-storage"
+
+# https://docs.sonarqube.org/latest/instance-administration/security/
+# sonarSecretKey: sonar-secret
