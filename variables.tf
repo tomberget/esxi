@@ -45,6 +45,32 @@ variable "sonar_namespace" {
   default     = "sonar"
 }
 
+variable "sonar_enable_official" {
+  description = "Use oteemo (false) or official (true)."
+  type        = bool
+  default     = false
+}
+
+variable "sonar_helm_chart" {
+  description = "Helm chart settings for sonar"
+  type        = map(map(string))
+  default = {
+    oteemo = {
+      chart_repository = "https://oteemo.github.io/charts"
+      chart_version    = "9.6.5"
+      image_tag        = "8.9.2-community"
+      official         = "false"
+    },
+    official = {
+      chart_repository = "https://SonarSource.github.io/helm-chart-sonarqube"
+      chart_version    = "1.1.3+107"
+      image_tag        = "9.0.1-community"
+      official         = "true"
+    },
+  }
+
+}
+
 variable "sonar_chart_repository" {
   description = "The chart repository used for SonarQube."
   type        = string
