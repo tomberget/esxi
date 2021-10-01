@@ -30,11 +30,12 @@ module "monitoring" {
 module "home_assistant" {
   source = "./modules/home_assistant"
 
-  chart_version = "10.0.0"
+  chart_version = "11.0.0"
   namespace     = "home-assistant"
   chart_name    = "home-assistant"
 
   enable_host_network = true
+  ha_metrics_token    = var.ha_metrics_token
 
   app_name = "ha"
   domain   = var.domain

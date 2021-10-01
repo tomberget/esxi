@@ -7,6 +7,10 @@ resource "kubernetes_namespace" "home_assistant" {
 resource "kubernetes_persistent_volume" "home_assistant" {
   metadata {
     name = "home-assistant-local-storage-pv"
+    labels = {
+      "app.kubernetes.io/instance" = "home-assistant"
+      "app.kubernetes.io/name"     = "home-assistant"
+    }
   }
   spec {
     capacity = {
@@ -54,6 +58,8 @@ resource "helm_release" "home_assistant" {
   values = [
     templatefile("${path.module}/templates/values.yaml", {
       enable_host_network = var.enable_host_network
+      ha_metrics_token    = var.ha_metrics_token
+      # ingress_host        = "${var.chart_name}.${var.domain}"
     })
   ]
 

@@ -24,7 +24,7 @@ resource "kubernetes_manifest" "sonar_pod_monitor" {
     metadata = {
       name      = "sonarqube"
       namespace = "monitoring"
-      labels    = {
+      labels = {
         prometheus = "default"
       }
     }

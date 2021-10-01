@@ -81,3 +81,7 @@ variable "sonar_ingress_host" {
   type        = string
   default     = "sonar.atarifam.lan"
 }
+
+variable "ha_metrics_token" {
+  description = "Bearer token for the long lived token for Prometheus"
+}
