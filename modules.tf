@@ -12,7 +12,7 @@ module "metallb" {
   source = "./modules/metallb"
 
   chart_name    = "metallb"
-  chart_version = "2.4.0"
+  chart_version = "2.5.5"
   namespace     = "metallb"
 
   network_range = var.metallb_network_range
