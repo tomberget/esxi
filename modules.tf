@@ -21,7 +21,7 @@ module "metallb" {
 module "monitoring" {
   source = "./modules/monitoring"
 
-  chart_version = "16.1.2"
+  chart_version = "19.0.1"
   namespace     = "monitoring"
 
   domain = var.domain

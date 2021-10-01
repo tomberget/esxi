@@ -15,3 +15,44 @@ resource "helm_release" "sonarqube" {
     }),
   ]
 }
+
+resource "kubernetes_manifest" "sonar_pod_monitor" {
+
+  manifest = {
+    apiVersion = "monitoring.coreos.com/v1"
+    kind       = "PodMonitor"
+    metadata = {
+      name      = "sonarqube"
+      namespace = "monitoring"
+      labels    = {
+        prometheus = "default"
+      }
+    }
+    spec = {
+      namespaceSelector = {
+        matchNames = [
+          "sonar",
+        ]
+      }
+      podMetricsEndpoints = [
+        {
+          interval   = "30s"
+          path       = "/"
+          scheme     = "http"
+          targetPort = "monitoring-ce"
+        },
+        {
+          interval   = "30s"
+          path       = "/"
+          scheme     = "http"
+          targetPort = "monitoring-web"
+        },
+      ]
+      selector = {
+        matchLabels = {
+          app = "sonarqube"
+        }
+      }
+    }
+  }
+}
