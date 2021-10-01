@@ -53,10 +53,10 @@ prometheusOperator:
   resources:
     limits:
       cpu: 700m
-      memory: 100Mi
+      memory: 256Mi
     requests:
       cpu: 700m
-      memory: 100Mi
+      memory: 256Mi
   tlsProxy:
     resources:
       limits:
@@ -73,7 +73,6 @@ prometheusOperator:
 prometheus:
   service:
     type: ClusterIP
-  
   prometheusSpec:
     externalUrl: ""
     routePrefix: /
@@ -101,7 +100,8 @@ prometheus:
           - source_labels: [__meta_kubernetes_pod_name]
             action: replace
             target_label: pod_name
-    ruleNamespaceSelector: {}
+    podMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelector:
       matchLabels:
         prometheus: default
