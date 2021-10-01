@@ -44,7 +44,7 @@ metrics:
       prometheus: default
     bearerTokenSecret:
       name: Prometheus
-      key: $(ha_metrics_token)
+      key: ${ha_metrics_token}
 
 # ingress:
 #   main:
@@ -52,5 +52,5 @@ metrics:
 #     annotations:
 #       kubernetes.io/ingress.class: traefik
 #     hosts:
-#     - host: $(ingress_host)
+#     - host: ${ingress_host}
 #       path: "/"

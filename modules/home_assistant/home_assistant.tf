@@ -59,7 +59,7 @@ resource "helm_release" "home_assistant" {
     templatefile("${path.module}/templates/values.yaml", {
       enable_host_network = var.enable_host_network
       ha_metrics_token    = var.ha_metrics_token
-      # ingress_host        = "${var.chart_name}.${var.domain}"
+      ingress_host        = "${var.chart_name}.${var.domain}"
     })
   ]
 
