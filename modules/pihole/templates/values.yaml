@@ -25,6 +25,13 @@ serviceDns:
     metallb.universe.tf/allow-shared-ip: pihole-svc
   type: LoadBalancer
 
+serviceDhcp:
+  enabled: false
+  loadBalancerIP: ${metallb_pihole_ip}
+  annotations:
+    metallb.universe.tf/allow-shared-ip: pihole-svc
+  type: LoadBalancer
+
 # virtualHost: pi.hole
 
 # ingress:

@@ -67,7 +67,7 @@ module "pihole" {
   source = "./modules/pihole"
 
   chart_name        = "pihole"
-  chart_version     = "1.9.1"
+  chart_version     = "2.4.2"
   namespace         = "pihole"
   domain            = var.domain
   metallb_pihole_ip = cidrhost(var.metallb_network_range, var.metallb_pihole_ip_hostnum)
