@@ -45,7 +45,7 @@ module "node_red" {
   source = "./modules/node_red"
 
   chart_name    = "node-red"
-  chart_version = "7.4.0"
+  chart_version = "9.0.1"
   namespace     = "node-red"
   domain        = var.domain
 }

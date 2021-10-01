@@ -1,7 +1,6 @@
-enableProjects: true
-
 env:
   TZ: "Europe/Oslo"
+  NODE_RED_ENABLE_PROJECTS: true
 
 persistence:
   data:
@@ -11,7 +10,3 @@ persistence:
     storageClass: local-storage
     accessMode: ReadWriteOnce
     mountpath: /data
-
-service:
-  enabled: true
-  type: ClusterIP
