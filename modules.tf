@@ -54,7 +54,7 @@ module "traefik" {
   source = "./modules/traefik"
 
   chart_name         = "traefik"
-  chart_version      = "10.3.1"
+  chart_version      = "10.3.6"
   namespace          = "traefik"
   metallb_traefik_ip = cidrhost(var.metallb_network_range, var.metallb_traefik_ip_hostnum)
 
