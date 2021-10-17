@@ -24,7 +24,10 @@ terraform {
       source  = "hashicorp/template"
       version = "~> 2"
     }
-
+    aws = {
+      source = "hashicorp/aws"
+      version = "~> 3"
+    }
     vsphere = {
       source  = "hashicorp/vsphere"
       version = "2.0.1"
