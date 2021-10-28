@@ -36,7 +36,7 @@ variable "datastore_name" {
 variable "sonar_enabled" {
   description = "Enable or disable the SonarQube module"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "sonar_namespace" {

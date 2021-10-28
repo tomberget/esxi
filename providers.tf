@@ -25,7 +25,7 @@ terraform {
       version = "~> 2"
     }
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "~> 3"
     }
     vsphere = {

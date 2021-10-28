@@ -1,10 +1,14 @@
 resource "kubernetes_namespace" "sonar" {
+  count = var.sonar_enabled ? 1 : 0
+
   metadata {
     name = var.sonar_namespace
   }
 }
 
 resource "kubernetes_persistent_volume" "sonar_postgresql" {
+  count = var.sonar_enabled ? 1 : 0
+
   metadata {
     name = "sonar-postgresql-local-storage-pv"
     labels = {
@@ -38,6 +42,8 @@ resource "kubernetes_persistent_volume" "sonar_postgresql" {
 }
 
 resource "kubernetes_persistent_volume" "sonar" {
+  count = var.sonar_enabled ? 1 : 0
+
   metadata {
     name = "sonar-local-storage-pv"
     labels = {
@@ -78,7 +84,7 @@ module "sonarqube_helm_chart" {
 
   source                   = "./modules/sonarqube"
   sonar_enabled            = var.sonar_enabled
-  sonar_namespace          = kubernetes_namespace.sonar.metadata.0.name
+  sonar_namespace          = kubernetes_namespace.sonar.0.metadata.0.name
   sonar_chart_repository   = each.value.chart_repository
   sonar_chart_version      = each.value.chart_version
   sonar_image_tag          = each.value.image_tag
