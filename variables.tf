@@ -84,4 +84,5 @@ variable "sonar_ingress_host" {
 
 variable "ha_metrics_token" {
   description = "Bearer token for the long lived token for Prometheus"
+  type        = string
 }

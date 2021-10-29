@@ -79,3 +79,65 @@ module "traefik_ingress_route" {
     helm_release.home_assistant
   ]
 }
+
+resource "kubernetes_secret" "prometheus" {
+  metadata {
+    name = "${var.chart_name}-prometheus-token"
+    namespace = kubernetes_namespace.home_assistant.metadata.0.name
+  }
+
+  data = {
+    token = var.ha_metrics_token
+  }
+
+  type = "Opaque"
+}
+
+resource "kubernetes_manifest" "home_assistant_servicemonitor" {
+
+  manifest = {
+    apiVersion = "monitoring.coreos.com/v1"
+    kind        = "ServiceMonitor"
+
+    metadata = {
+      labels = {
+        "app.kubernetes.io/instance" = "home-assistant"
+        "app.kubernetes.io/name"     = "home-assistant"
+        "prometheus"                 = "default"
+      }
+      name      = var.chart_name
+      namespace = kubernetes_namespace.home_assistant.metadata.0.name
+    }
+
+    spec = {
+      endpoints = [{
+        interval      = "30s"
+        path          = "/api/prometheus"
+        port          = "http"
+        scrapeTimeout = "30s"
+        authorization = {
+          credentials = {
+            key  = "token"
+            name = kubernetes_secret.prometheus.metadata.0.name
+          }
+        }
+      }]
+      jobLabel = "app.kubernetes.io/name"
+      namespaceSelector = {
+        matchNames = [
+          "home-assistant",
+        ]
+      }
+      selector = {
+        matchLabels = {
+          "app.kubernetes.io/instance" = "home-assistant"
+          "app.kubernetes.io/name"     = "home-assistant"
+        }
+      }
+    }
+  }
+
+  depends_on = [
+    helm_release.home_assistant
+  ]
+}

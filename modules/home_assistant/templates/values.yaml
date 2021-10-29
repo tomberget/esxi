@@ -16,12 +16,6 @@ service:
   port:
     port: 8123
 
-# # Enable devices to be discoverable
-# hostNetwork: ${enable_host_network}
-
-# # When hostNetwork is true set dnsPolicy to ClusterFirstWithHostNet
-# dnsPolicy: ClusterFirstWithHostNet
-
 persistence:
   config:
     enabled: true
@@ -35,22 +29,3 @@ persistence:
     storageClass: "local-storage"
     accessMode: ReadWriteOnce
     size: 5Gi
-
-# Enable a prometheus-operator servicemonitor
-metrics:
-  enabled: true
-  serviceMonitor:
-    labels:
-      prometheus: default
-    bearerTokenSecret:
-      name: Prometheus
-      key: ${ha_metrics_token}
-
-# ingress:
-#   main:
-#     enabled: true
-#     annotations:
-#       kubernetes.io/ingress.class: traefik
-#     hosts:
-#     - host: ${ingress_host}
-#       path: "/"
