@@ -54,7 +54,7 @@ module "traefik" {
   source = "./modules/traefik"
 
   chart_name         = "traefik"
-  chart_version      = "10.3.6"
+  chart_version      = "10.6.0"
   namespace          = "traefik"
   metallb_traefik_ip = cidrhost(var.metallb_network_range, var.metallb_traefik_ip_hostnum)
 
@@ -78,6 +78,35 @@ module "pihole" {
   ]
 }
 
+module "unifi" {
+  source = "./modules/unifi"
+
+  chart_name    = "unifi"
+  chart_version = "4.3.0"
+  namespace     = "unifi"
+  domain        = var.external_domain
+
+  depends_on = [
+    module.metallb,
+  ]
+}
+
+module "cert_manager" {
+  source = "./modules/cert_manager"
+
+  chart_name     = "cert-manager"
+  chart_version  = "1.6.1"
+  namespace      = "cert-manager"
+  domain         = var.external_domain
+  access_key_id  = var.access_key_id
+  email_address  = var.email_address
+  region         = var.region
+  hosted_zone_id = var.hosted_zone_id
+
+  depends_on = [
+    module.metallb,
+  ]
+}
 # # module "step_certificates" {
 # #   source = "./modules/step_certificates"
 

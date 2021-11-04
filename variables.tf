@@ -4,6 +4,12 @@ variable "domain" {
   default = "atarifam.lan"
 }
 
+variable "external_domain" {
+  type    = string
+  default = "aws.atarifam.com"
+}
+
+
 variable "metallb_network_range" {
   type = string
 }
@@ -84,5 +90,26 @@ variable "sonar_ingress_host" {
 
 variable "ha_metrics_token" {
   description = "Bearer token for the long lived token for Prometheus"
+  type        = string
+}
+
+variable "access_key_id" {
+  description = "AWS access key id uses for Route53 DNS administration"
+  type        = string
+}
+
+variable "email_address" {
+  description = "Email address used for issuing cert-manager certificates"
+  type        = string
+}
+
+variable "region" {
+  description = "AWS region used"
+  type        = string
+  default     = "eu-west-1"
+}
+
+variable "hosted_zone_id" {
+  description = "Hosted zone id for Route53"
   type        = string
 }

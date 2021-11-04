@@ -8,9 +8,7 @@ resource "kubernetes_manifest" "ingress_route" {
     }
 
     spec = {
-      entryPoints = [
-        "web",
-      ]
+      entryPoints = var.entry_points
       routes = [
         {
           kind  = var.route_kind

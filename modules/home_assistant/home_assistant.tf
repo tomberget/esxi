@@ -82,7 +82,7 @@ module "traefik_ingress_route" {
 
 resource "kubernetes_secret" "prometheus" {
   metadata {
-    name = "${var.chart_name}-prometheus-token"
+    name      = "${var.chart_name}-prometheus-token"
     namespace = kubernetes_namespace.home_assistant.metadata.0.name
   }
 
@@ -97,7 +97,7 @@ resource "kubernetes_manifest" "home_assistant_servicemonitor" {
 
   manifest = {
     apiVersion = "monitoring.coreos.com/v1"
-    kind        = "ServiceMonitor"
+    kind       = "ServiceMonitor"
 
     metadata = {
       labels = {

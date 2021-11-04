@@ -11,8 +11,8 @@ deployment:
 # Use ingressClass. Ignored if Traefik version < 2.3 / kubernetes < 1.18.x
 ingressClass:
   # true is not unit-testable yet, pending https://github.com/rancher/helm-unittest/pull/12
-  enabled: false
-  isDefaultClass: false
+  enabled: true
+  isDefaultClass: true
   # Use to force a networking.k8s.io API Version for certain CI/CD applications. E.g. "v1beta1"
   fallbackApiVersion: ""
 
@@ -100,7 +100,7 @@ ports:
     # You SHOULD NOT expose the traefik port on production deployments.
     # If you want to access it from outside of your cluster,
     # use `kubectl port-forward` or create a secure ingress
-    expose: true
+    expose: false
     # The exposed port for this service
     exposedPort: 9000
     # The port protocol (TCP/UDP)

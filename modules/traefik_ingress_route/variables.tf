@@ -14,6 +14,14 @@ variable "route_kind" {
   default     = "Rule"
 }
 
+variable "entry_points" {
+  description = "Entry ponints for the IngressRoute"
+  type        = list(string)
+  default = [
+    "web",
+  ]
+}
+
 variable "route_match" {
   description = "Route matching"
   type        = string
