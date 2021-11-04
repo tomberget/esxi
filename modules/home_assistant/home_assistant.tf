@@ -60,25 +60,27 @@ resource "helm_release" "home_assistant" {
       enable_host_network = var.enable_host_network
       ha_metrics_token    = var.ha_metrics_token
       ingress_host        = "${var.chart_name}.${var.domain}"
+      tls_name            = "${var.chart_name}-${replace(var.domain, ".", "-")}-tls"
+      service_name        = var.chart_name
     })
   ]
 
   depends_on = [kubernetes_persistent_volume.home_assistant]
 }
 
-module "traefik_ingress_route" {
-  source = "../traefik_ingress_route"
+# module "traefik_ingress_route" {
+#   source = "../traefik_ingress_route"
 
-  name         = var.chart_name
-  service_name = var.chart_name
-  namespace    = kubernetes_namespace.home_assistant.metadata[0].name
-  route_match  = "Host(`${var.chart_name}.${var.domain}`) && PathPrefix(`/`)"
-  service_port = "http"
+#   name         = var.chart_name
+#   service_name = var.chart_name
+#   namespace    = kubernetes_namespace.home_assistant.metadata[0].name
+#   route_match  = "Host(`${var.chart_name}.${var.domain}`) && PathPrefix(`/`)"
+#   service_port = "http"
 
-  depends_on = [
-    helm_release.home_assistant
-  ]
-}
+#   depends_on = [
+#     helm_release.home_assistant
+#   ]
+# }
 
 resource "kubernetes_secret" "prometheus" {
   metadata {

@@ -38,7 +38,7 @@ module "home_assistant" {
   ha_metrics_token    = var.ha_metrics_token
 
   app_name = "ha"
-  domain   = var.domain
+  domain   = var.external_domain
 }
 
 module "node_red" {

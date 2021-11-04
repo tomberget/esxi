@@ -16,6 +16,29 @@ service:
   port:
     port: 8123
 
+ingress:
+  # -- Enable and configure ingress settings for the chart under this key.
+  # @default -- See values.yaml
+  main:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-issuer
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+    ingressClassName: traefik
+    hosts:
+    - host: ${ingress_host}
+      paths:
+      - path: /
+        pathType: Prefix
+        service:
+          name: ${service_name}
+          port: 8123
+    tls:
+    - hosts:
+      - ${ingress_host}
+      secretName: ${tls_name}
+
 persistence:
   config:
     enabled: true

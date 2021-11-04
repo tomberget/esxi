@@ -8,12 +8,6 @@ variable "namespace" {
   type        = string
 }
 
-variable "route_kind" {
-  description = "Route kind. Most likely Rule"
-  type        = string
-  default     = "Rule"
-}
-
 variable "entry_points" {
   description = "Entry ponints for the IngressRoute"
   type        = list(string)
@@ -21,6 +15,13 @@ variable "entry_points" {
     "web",
   ]
 }
+
+variable "route_kind" {
+  description = "Route kind. Most likely Rule"
+  type        = string
+  default     = "Rule"
+}
+
 
 variable "route_match" {
   description = "Route matching"
