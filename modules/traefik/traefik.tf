@@ -17,3 +17,27 @@ resource "helm_release" "traefik" {
     })
   ]
 }
+
+resource "kubernetes_manifest" "https_redirect_middleware" {
+
+  manifest = {
+    apiVersion = "traefik.containo.us/v1alpha1"
+    kind       = "Middleware"
+
+    metadata = {
+      name = "https-redirectscheme"
+      namespace = kubernetes_namespace.traefik.metadata.0.name
+    }
+
+    spec = {
+      redirectScheme = {
+        scheme    = "https"
+        permanent = true
+      }
+    }
+  }
+
+  depends_on = [
+    helm_release.traefik
+  ]
+}
