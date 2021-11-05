@@ -42,23 +42,12 @@ resource "helm_release" "node_red" {
 
   values = [
     templatefile("${path.module}/templates/values.yaml", {
-
+      ingress_host = "${var.chart_name}.${var.domain}"
+      tls_name     = "${var.chart_name}-${replace(var.domain, ".", "-")}-tls"
+      service_name = var.chart_name
+      service_port = "1880"
     })
   ]
 
   depends_on = [kubernetes_persistent_volume.node_red]
-}
-
-module "ingress_route" {
-  source = "../traefik_ingress_route"
-
-  name         = var.chart_name
-  service_name = var.chart_name
-  namespace    = var.namespace
-  route_match  = "Host(`${var.chart_name}.${var.domain}`) && PathPrefix(`/`)"
-  service_port = "http"
-
-  depends_on = [
-    helm_release.node_red
-  ]
 }

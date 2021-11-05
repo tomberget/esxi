@@ -47,7 +47,7 @@ module "node_red" {
   chart_name    = "node-red"
   chart_version = "9.0.1"
   namespace     = "node-red"
-  domain        = var.domain
+  domain        = var.external_domain
 }
 
 module "traefik" {
