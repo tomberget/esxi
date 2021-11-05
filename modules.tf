@@ -57,6 +57,7 @@ module "traefik" {
   chart_version      = "10.6.0"
   namespace          = "traefik"
   metallb_traefik_ip = cidrhost(var.metallb_network_range, var.metallb_traefik_ip_hostnum)
+  domain             = var.external_domain
 
   depends_on = [
     module.metallb
