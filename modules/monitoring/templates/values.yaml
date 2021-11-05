@@ -140,7 +140,7 @@ prometheus:
     paths: ["/"]
     tls:
     - hosts:
-      - ${alertmanager_ingress_host}
+      - ${prometheus_ingress_host}
       secretName: ${prometheus_tls_name}
 
 grafana:
@@ -172,6 +172,20 @@ grafana:
       enabled: true
       label: grafana_dashboard
       searchNamespace: ALL
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-issuer
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+    ingressClassName: traefik
+    hosts:
+    - ${grafana_ingress_host}
+    paths: ["/"]
+    tls:
+    - hosts:
+      - ${grafana_ingress_host}
+      secretName: ${grafana_tls_name}
 
 coreDns:
   enabled: true
