@@ -78,19 +78,6 @@ module "pihole" {
   ]
 }
 
-module "unifi" {
-  source = "./modules/unifi"
-
-  chart_name    = "unifi"
-  chart_version = "4.3.0"
-  namespace     = "unifi"
-  domain        = var.external_domain
-
-  depends_on = [
-    module.metallb,
-  ]
-}
-
 module "cert_manager" {
   source = "./modules/cert_manager"
 
