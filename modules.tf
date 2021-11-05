@@ -21,10 +21,10 @@ module "metallb" {
 module "monitoring" {
   source = "./modules/monitoring"
 
-  chart_version = "19.0.1"
+  chart_version = "19.2.3"
   namespace     = "monitoring"
 
-  domain = var.domain
+  domain = var.external_domain
 }
 
 module "home_assistant" {

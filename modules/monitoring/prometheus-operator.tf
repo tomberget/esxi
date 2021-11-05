@@ -109,26 +109,18 @@ resource "helm_release" "prometheus_operator" {
 
   values = [
     templatefile("${path.module}/templates/values.yaml", {
-      grafana_org_name = var.grafana_org_name
-      grafana_password = random_password.grafana.result
+      alertmanager_ingress_host = "alertmanager.${var.domain}"
+      alertmanager_tls_name     = "alertmanager-${replace(var.domain, ".", "-")}-tls"
+
+      prometheus_ingress_host = "prometheus.${var.domain}"
+      prometheus_tls_name     = "prometheus-${replace(var.domain, ".", "-")}-tls"
+
+      grafana_ingress_host = "grafana.${var.domain}"
+      grafana_tls_name     = "grafana-${replace(var.domain, ".", "-")}-tls"
+      grafana_org_name     = var.grafana_org_name
+      grafana_password     = random_password.grafana.result
 
       prometheus_operator_create_crd = true
     })
-  ]
-}
-
-module "ingress_routes" {
-  source = "../traefik_ingress_route"
-
-  for_each = var.ingress_route_list
-
-  name         = each.key
-  service_name = each.value["service_name"]
-  namespace    = var.namespace
-  route_match  = "Host(`${each.key}.${var.domain}`) && PathPrefix(`/`)"
-  service_port = each.value["port_name"]
-
-  depends_on = [
-    resource.helm_release.prometheus_operator,
   ]
 }

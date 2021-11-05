@@ -32,8 +32,20 @@ alertmanager:
   service:
     type: ClusterIP
   ingress:
-    enabled: false
-    paths: ["/*"]
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-issuer
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+    ingressClassName: traefik
+    hosts:
+    - ${alertmanager_ingress_host}
+    paths: ["/"]
+    tls:
+    - hosts:
+      - ${alertmanager_ingress_host}
+      secretName: ${alertmanager_tls_name}
+
   alertmanagerSpec:
     externalUrl: ""
     routePrefix: /
@@ -116,6 +128,20 @@ prometheus:
           resources:
             requests:
               storage: 10Gi
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-issuer
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+    ingressClassName: traefik
+    hosts:
+    - ${prometheus_ingress_host}
+    paths: ["/"]
+    tls:
+    - hosts:
+      - ${alertmanager_ingress_host}
+      secretName: ${prometheus_tls_name}
 
 grafana:
   enabled: true
