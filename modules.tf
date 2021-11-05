@@ -5,7 +5,7 @@ module "cilium" {
   chart_version = "1.10.4"
   namespace     = "kube-system"
 
-  domain = var.domain
+  domain = var.external_domain
 }
 
 module "metallb" {
