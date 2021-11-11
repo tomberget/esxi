@@ -97,7 +97,7 @@ module "cert_manager" {
 }
 
 module "kured" {
-  source = "./modules/cert-manager"
+  source = "./modules/kured"
 
   chart_name    = "kured"
   chart_version = "2.10.0"
