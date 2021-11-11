@@ -95,6 +95,14 @@ module "cert_manager" {
     module.metallb,
   ]
 }
+
+module "kured" {
+  source = "./modules/kured"
+
+  chart_name    = "kured"
+  chart_version = "2.10.0"
+  namespace     = "kube-system"
+}
 # # module "step_certificates" {
 # #   source = "./modules/step_certificates"
 
