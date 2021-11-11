@@ -3,12 +3,12 @@ configuration:
 
 metrics:
   create: true
-  namespace: $(namespace)
+  namespace: ${namespace}
 
 service:
   create: true
-  port: $(service_port)
+  port: ${service_port}
   annotations:
     prometheus.io/scrape: "true"
     prometheus.io/path: "/metrics"
-    prometheus.io/port: "$(service_port)"
+    prometheus.io/port: "${service_port}"
