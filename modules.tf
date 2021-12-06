@@ -50,6 +50,20 @@ module "node_red" {
   domain        = var.external_domain
 }
 
+module "ingress_nginx" {
+  source = "./modules/ingress_nginx"
+
+  chart_name               = "ingress-nginx"
+  chart_version            = "4.0.13"
+  namespace                = "nginx"
+  metallb_ingress_nginx_ip = cidrhost(var.metallb_network_range, var.metallb_ingress_nginx_ip_hostnum)
+  domain                   = var.external_domain
+
+  depends_on = [
+    module.metallb
+  ]
+}
+
 module "traefik" {
   source = "./modules/traefik"
 
@@ -103,9 +117,3 @@ module "kured" {
   chart_version = "2.10.0"
   namespace     = "kube-system"
 }
-# # module "step_certificates" {
-# #   source = "./modules/step_certificates"
-
-# #   step_certificates_chart_version = "1.15.5"
-# #   step_certificates_namespace = "step-certificates"
-# # }

@@ -25,6 +25,11 @@ variable "metallb_traefik_ip_hostnum" {
   type    = number
 }
 
+variable "metallb_ingress_nginx_ip_hostnum" {
+  default = 3
+  type    = number
+}
+
 # vSphere variables
 variable "esxi_hosts" {
   default = ["esxi"]
