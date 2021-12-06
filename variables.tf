@@ -1,12 +1,12 @@
 # Local variables
 variable "domain" {
   description = "Local domain to be used."
-  type    = string
+  type        = string
 }
 
 variable "external_domain" {
   description = "Proper domain to be used."
-  type    = string
+  type        = string
 }
 
 
