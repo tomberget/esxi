@@ -2,7 +2,7 @@ module "cilium" {
   source = "./modules/cilium"
 
   chart_name    = "cilium"
-  chart_version = "1.10.4"
+  chart_version = "1.11.0"
   namespace     = "kube-system"
 
   domain = var.external_domain
@@ -12,7 +12,7 @@ module "metallb" {
   source = "./modules/metallb"
 
   chart_name    = "metallb"
-  chart_version = "2.5.5"
+  chart_version = "2.5.13"
   namespace     = "metallb"
 
   network_range = var.metallb_network_range
@@ -21,7 +21,7 @@ module "metallb" {
 module "monitoring" {
   source = "./modules/monitoring"
 
-  chart_version = "19.2.3"
+  chart_version = "23.1.0"
   namespace     = "monitoring"
 
   domain = var.external_domain
@@ -30,7 +30,7 @@ module "monitoring" {
 module "home_assistant" {
   source = "./modules/home_assistant"
 
-  chart_version = "11.0.0"
+  chart_version = "11.2.1"
   namespace     = "home-assistant"
   chart_name    = "home-assistant"
 
@@ -45,7 +45,7 @@ module "node_red" {
   source = "./modules/node_red"
 
   chart_name    = "node-red"
-  chart_version = "9.0.1"
+  chart_version = "9.1.0"
   namespace     = "node-red"
   domain        = var.external_domain
 }
@@ -82,7 +82,7 @@ module "pihole" {
   source = "./modules/pihole"
 
   chart_name        = "pihole"
-  chart_version     = "2.4.2"
+  chart_version     = "2.5.3"
   namespace         = "pihole"
   domain            = var.domain
   metallb_pihole_ip = cidrhost(var.metallb_network_range, var.metallb_pihole_ip_hostnum)
@@ -114,6 +114,6 @@ module "kured" {
   source = "./modules/kured"
 
   chart_name    = "kured"
-  chart_version = "2.10.0"
+  chart_version = "2.10.2"
   namespace     = "kube-system"
 }

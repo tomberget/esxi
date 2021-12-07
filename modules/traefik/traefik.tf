@@ -72,7 +72,7 @@ resource "kubernetes_service" "traefik_dashboard" {
   ]
 }
 
-resource "kubernetes_ingress" "traefik_dashboard" {
+resource "kubernetes_ingress_v1" "traefik_dashboard" {
 
   metadata {
     name      = "${var.chart_name}-dashboard"
@@ -95,8 +95,12 @@ resource "kubernetes_ingress" "traefik_dashboard" {
       http {
         path {
           backend {
-            service_name = kubernetes_service.traefik_dashboard.metadata.0.name
-            service_port = kubernetes_service.traefik_dashboard.spec.0.port.0.name
+            service {
+              name = kubernetes_service.traefik_dashboard.metadata.0.name
+              port {
+                number = kubernetes_service.traefik_dashboard.spec.0.port.0.port
+              }
+            }
           }
 
           path = "/"

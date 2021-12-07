@@ -15,7 +15,7 @@ resource "kubernetes_service" "external" {
   }
 }
 
-resource "kubernetes_ingress" "external" {
+resource "kubernetes_ingress_v1" "external" {
   metadata {
     name      = local.external_service_name
     namespace = var.service_namespace
@@ -32,8 +32,12 @@ resource "kubernetes_ingress" "external" {
       http {
         path {
           backend {
-            service_name = kubernetes_service.external.metadata.0.name
-            service_port = var.service_port
+            service {
+              name = kubernetes_service.external.metadata.0.name
+              port {
+                number = var.service_port
+              }
+            }
           }
 
           path = var.ingress_path
