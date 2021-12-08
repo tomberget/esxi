@@ -23,6 +23,7 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-issuer
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/app-root: /admin
   path: /
   hosts:
     # virtualHost (default value is pi.hole) will be appended to the hosts
@@ -35,7 +36,7 @@ ingress:
 
 persistentVolumeClaim:
   # set to true to use pvc
-  enabled: true
+  enabled: false
   # set to true to use you own pvc
   # existingClaim: myExistingClaim
   annotations: {}
@@ -54,7 +55,7 @@ persistentVolumeClaim:
   ## If subPath is set mount a sub folder of a volume instead of the root of the volume.
   ## This is especially handy for volume plugins that don't natively support sub mounting (like glusterfs).
 
-  subPath: "pihole"
+  # subPath: "pihole"
 
 nodeSelector: {}
 
@@ -71,10 +72,10 @@ admin:
 extraEnvVars:
   TZ: "Europe/Oslo"
 
-# default upstream DNS servers to use
-DNS1: "1.1.1.1"
+# -- default upstream DNS 1 server to use
+DNS1: "1.1.1.2"
+# -- default upstream DNS 2 server to use
 DNS2: "8.8.8.8"
-DNS3: "8.8.4.4"
 
 antiaff:
   # set to true to enable antiaffinity (example: 2 pihole DNS in the same cluster)
@@ -117,11 +118,10 @@ adlists: {}
   # - https://reddestdream.github.io/Projects/MinimalHosts/etc/MinimalHostsBlocker/minimalhosts
 
 whitelist: {}
+  # If you want to have special domains whitelisted, add them here
+  # - *.whitelist.com
 
-blacklist:
-- pihole.aws.atarifam.com
-- nginx.atarifam.com
-
+blacklist: {}
   # If you want to have special domains blacklisted, add them here
   # - *.blackist.com
 
@@ -132,6 +132,9 @@ regex: {}
 ftl: {}
   # Add values for pihole-FTL.conf
   # MAXDBDAYS: 14
+
+# -- should container run in privileged mode
+privileged: "false"
 
 monitoring:
   podMonitor:
@@ -145,3 +148,10 @@ monitoring:
       # requests:
       #  cpu: 100m
       #  memory: 128Mi
+
+podDnsConfig:
+  enabled: true
+  policy: "None"
+  nameservers:
+  - 127.0.0.1
+  - 1.1.1.2
