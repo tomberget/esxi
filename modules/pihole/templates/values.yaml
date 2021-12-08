@@ -2,22 +2,11 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-image:
-  repository: "pihole/pihole"
-  tag: v5.8.1
-  pullPolicy: IfNotPresent
-
-replicaCount: 1
-
-strategyType: RollingUpdate
-maxSurge: 1
-maxUnavailable: 1
-
 serviceWeb:
-  loadBalancerIP: ${metallb_pihole_ip}
-  annotations:
-    metallb.universe.tf/allow-shared-ip: pihole-svc
-  type: LoadBalancer
+  http:
+    enabled: true
+  https:
+    enabled: true
 
 serviceDns:
   loadBalancerIP: ${metallb_pihole_ip}
@@ -27,57 +16,27 @@ serviceDns:
 
 serviceDhcp:
   enabled: false
-  loadBalancerIP: ${metallb_pihole_ip}
+
+ingress:
+  enabled: true
+  ingressClassName: nginx
   annotations:
-    metallb.universe.tf/allow-shared-ip: pihole-svc
-  type: LoadBalancer
-
-# virtualHost: pi.hole
-
-# ingress:
-#   enabled: false
-#   annotations: {}
-#     # kubernetes.io/ingress.class: nginx
-#     # kubernetes.io/tls-acme: "true"
-#   path: /
-#   hosts:
-#     # virtualHost (default value is pi.hole) will be appended to the hosts
-#     - chart-example.local
-#   tls: []
-#   #  - secretName: chart-example-tls
-#   #    hosts:
-#   #     #- virtualHost (default value is pi.hole) will be appended to the hosts
-#   #      - chart-example.local
-
-# Probes configuration
-probes:
-  # probes.liveness -- Configure the healthcheck for the ingress controller
-  liveness:
-    enabled: true
-    initialDelaySeconds: 60
-    failureThreshold: 10
-    timeoutSeconds: 5
-  readiness:
-    enabled: true
-    initialDelaySeconds: 60
-    failureThreshold: 3
-    timeoutSeconds: 5
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #  cpu: 100m
-  #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
+    cert-manager.io/cluster-issuer: letsencrypt-issuer
+    nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    nginx.ingress.kubernetes.io/app-root: /admin
+  path: /
+  hosts:
+    # virtualHost (default value is pi.hole) will be appended to the hosts
+    - ${ingress_host}
+  tls:
+  - secretName: ${tls_secret}
+    hosts:
+    #- virtualHost (default value is pi.hole) will be appended to the hosts
+      - ${ingress_host}
 
 persistentVolumeClaim:
   # set to true to use pvc
-  enabled: true
+  enabled: false
   # set to true to use you own pvc
   # existingClaim: myExistingClaim
   annotations: {}
@@ -96,7 +55,7 @@ persistentVolumeClaim:
   ## If subPath is set mount a sub folder of a volume instead of the root of the volume.
   ## This is especially handy for volume plugins that don't natively support sub mounting (like glusterfs).
 
-  subPath: "pihole"
+  # subPath: "pihole"
 
 nodeSelector: {}
 
@@ -113,16 +72,10 @@ admin:
 extraEnvVars:
   TZ: "Europe/Oslo"
 
-# extraEnvVarsSecret is a list of secrets to load in as environment variables.
-extraEnvVarsSecret: {}
-  # env_var:
-  #   name: secret-name
-  #   key: secret-key
-
-# default upstream DNS servers to use
-DNS1: "1.1.1.1"
+# -- default upstream DNS 1 server to use
+DNS1: "1.1.1.2"
+# -- default upstream DNS 2 server to use
 DNS2: "8.8.8.8"
-DNS3: "8.8.4.4"
 
 antiaff:
   # set to true to enable antiaffinity (example: 2 pihole DNS in the same cluster)
@@ -165,8 +118,8 @@ adlists: {}
   # - https://reddestdream.github.io/Projects/MinimalHosts/etc/MinimalHostsBlocker/minimalhosts
 
 whitelist: {}
-  # If you want to provide whitelisted domains, add them here.
-  # - clients4.google.com
+  # If you want to have special domains whitelisted, add them here
+  # - *.whitelist.com
 
 blacklist: {}
   # If you want to have special domains blacklisted, add them here
@@ -180,17 +133,8 @@ ftl: {}
   # Add values for pihole-FTL.conf
   # MAXDBDAYS: 14
 
-# webHttp: "80"
-# webHttps: "443"
-# hostNetwork: "false"
-# privileged: "false"
-
-customVolumes:
-  enabled: false
-  config: {}
-    # any volume type can be used here
-    # hostPath:
-    #   path: "/mnt/data"
+# -- should container run in privileged mode
+privileged: "false"
 
 monitoring:
   podMonitor:
@@ -204,3 +148,10 @@ monitoring:
       # requests:
       #  cpu: 100m
       #  memory: 128Mi
+
+podDnsConfig:
+  enabled: true
+  policy: "None"
+  nameservers:
+  - 127.0.0.1
+  - 1.1.1.2
