@@ -1,4 +1,12 @@
 # Local variables
+variable "namespace" {
+  description = "List of namespaces to create"
+  type        = list(string)
+  default = [
+    "grafana",
+  ]
+}
+
 variable "domain" {
   description = "Local domain to be used."
   type        = string

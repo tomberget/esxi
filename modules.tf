@@ -1,3 +1,5 @@
+data "kubernetes_all_namespaces" "all_namespaces" {}
+
 module "cilium" {
   source = "./modules/cilium"
 
@@ -116,4 +118,21 @@ module "kured" {
   chart_name    = "kured"
   chart_version = "2.10.2"
   namespace     = "kube-system"
+}
+
+module "grafana_operator" {
+  count = true ? 1 : 0
+
+  source                               = "./modules/grafana_operator"
+  grafana_operator_namespace           = "grafana"
+  grafana_operator_chart_repository    = "grafana-operator"
+  grafana_operator_chart_version       = "1.5.3"
+  grafana_ingress_host                 = "grafana-op.${var.external_domain}"
+  grafana_data_source_url              = "http://prometheus-operator-kube-p-prometheus.monitoring.svc:9090"
+  grafana_data_source_url_alertmanager = "http://prometheus-operator-kube-p-alertmanager.monitoring.svc:9093"
+  grafana_data_source_access           = "direct"
+
+  grafana_labels = {
+    "grafana" : "dashboard",
+  }
 }

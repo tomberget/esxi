@@ -87,7 +87,7 @@ antiaff:
   strict: true
 
 dnsmasq:
-  upstreamServers: []
+  upstreamServers:
   # Here you can add upstream dns servers with. All lines will be added to the
   # pihole dnsmasq configuration.
   # The format should be like:
