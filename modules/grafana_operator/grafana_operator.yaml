@@ -1,0 +1,93 @@
+operator:
+  prometheus:
+    serviceMonitor:
+      enabled: true
+
+grafana:
+  enabled: false
+  updateStrategy:
+    type: Recreate
+  envFrom:
+    ## This configmap is created manually:
+    #     apiVersion: v1
+    #     kind: ConfigMap
+    #     metadata:
+    #       name: grafana-env
+    #     data:
+    #       GF_AUTH_GENERIC_OAUTH_NAME: Fiskeridirektoratet
+  - secretRef:
+      name: prometheus-alertmanager-plugin
+  resources:
+    limits:
+      cpu: "250m"
+      memory:  "250Mi"
+    requests:
+      cpu: "250m"
+      memory:  "250Mi"
+  persistence:
+    enabled: true
+    storageClass: local-storage
+    accessMode: ReadWriteOnce
+    size: 4Gi
+  labels:
+    ${grafana_labels}
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hostname: "${grafana_ingress_url}"
+    path: /
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-issuer
+      nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    tls: true
+    tlsSecret: "${grafana_ingress_tls}"
+  config:
+    server:
+      root_url: "https://${grafana_ingress_url}"
+      domain: ${grafana_ingress_url}
+      enforce_domain: true
+      enable_gzip: true
+    log:
+      mode: "console"
+      level: "warn"
+    alerting:
+      enabled: true
+    analytics:
+      reporting_enabled: false
+      check_for_updates: false
+    security:
+      disable_initial_admin_creation: false
+      disable_gravatar: false
+    auth:
+      disable_login_form: false
+      disable_signout_menu: false
+    users:
+      allow_sign_up: false
+    plugins:
+      enable_alpha: true
+extraDeploy:
+  - apiVersion: integreatly.org/v1alpha1
+    kind: GrafanaDataSource
+    metadata:
+      name: grafanadatasource
+    spec:
+      name: middleware.yaml
+      datasources:
+      - name: prometheus
+        type: prometheus
+        access: ${prometheus_data_source_access}
+        url: ${prometheus_data_source_url}
+        isDefault: false
+        version: 1
+        editable: true
+        jsonData:
+          tlsSkipVerify: false
+          timeInterval: "5s"
+      - name: prodalertmanager
+        type: alertmanager
+        access: ${prometheus_data_source_access}
+        url: ${alertmanager_data_source_url}
+        isDefault: false
+        version: 1
+        editable: true
+        jsonData:

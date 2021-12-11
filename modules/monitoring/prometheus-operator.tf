@@ -1,10 +1,3 @@
-resource "kubernetes_namespace" "prometheus" {
-  metadata {
-    name = var.namespace
-  }
-}
-
-
 resource "kubernetes_persistent_volume" "alertmanager" {
   metadata {
     name = "alertmanager-local-storage-pv"
@@ -102,7 +95,7 @@ resource "random_password" "grafana" {
 
 resource "helm_release" "prometheus_operator" {
   name       = "prometheus-operator"
-  namespace  = kubernetes_namespace.prometheus.metadata[0].name
+  namespace  = var.namespace
   repository = "https://prometheus-community.github.io/helm-charts"
   chart      = "kube-prometheus-stack"
   version    = var.chart_version

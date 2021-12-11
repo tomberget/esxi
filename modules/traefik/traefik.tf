@@ -1,12 +1,6 @@
-resource "kubernetes_namespace" "traefik" {
-  metadata {
-    name = var.namespace
-  }
-}
-
 resource "helm_release" "traefik" {
   name       = var.chart_name
-  namespace  = kubernetes_namespace.traefik.metadata[0].name
+  namespace  = var.namespace
   repository = "https://helm.traefik.io/traefik"
   chart      = var.chart_name
   version    = var.chart_version
@@ -26,7 +20,7 @@ resource "kubernetes_manifest" "https_redirect_middleware" {
 
     metadata = {
       name      = "https-redirectscheme"
-      namespace = kubernetes_namespace.traefik.metadata.0.name
+      namespace = var.namespace
     }
 
     spec = {
@@ -46,7 +40,7 @@ resource "kubernetes_service" "traefik_dashboard" {
 
   metadata {
     name      = "${var.chart_name}-dashboard"
-    namespace = kubernetes_namespace.traefik.metadata.0.name
+    namespace = var.namespace
     labels = {
       "app.kubernetes.io/instance" = var.chart_name
       "app.kubernetes.io/name"     = var.chart_name
@@ -76,7 +70,7 @@ resource "kubernetes_ingress_v1" "traefik_dashboard" {
 
   metadata {
     name      = "${var.chart_name}-dashboard"
-    namespace = kubernetes_namespace.traefik.metadata.0.name
+    namespace = var.namespace
     labels = {
       "app.kubernetes.io/instance" = var.chart_name
       "app.kubernetes.io/name"     = var.chart_name

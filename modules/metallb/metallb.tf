@@ -1,12 +1,6 @@
-resource "kubernetes_namespace" "metallb" {
-  metadata {
-    name = var.namespace
-  }
-}
-
 resource "helm_release" "metallb" {
   name       = var.chart_name
-  namespace  = kubernetes_namespace.metallb.metadata[0].name
+  namespace  = var.namespace
   repository = "https://charts.bitnami.com/bitnami"
   chart      = var.chart_name
   version    = var.chart_version
