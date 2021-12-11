@@ -1,9 +1,3 @@
-resource "kubernetes_namespace" "home_assistant" {
-  metadata {
-    name = var.namespace
-  }
-}
-
 resource "kubernetes_persistent_volume" "home_assistant" {
   metadata {
     name = "home-assistant-local-storage-pv"
@@ -50,7 +44,7 @@ resource "kubernetes_persistent_volume" "home_assistant" {
 
 resource "helm_release" "home_assistant" {
   name       = var.chart_name
-  namespace  = kubernetes_namespace.home_assistant.metadata[0].name
+  namespace  = var.namespace
   repository = "https://k8s-at-home.com/charts/"
   chart      = var.chart_name
   version    = var.chart_version
@@ -85,7 +79,7 @@ resource "helm_release" "home_assistant" {
 resource "kubernetes_secret" "prometheus" {
   metadata {
     name      = "${var.chart_name}-prometheus-token"
-    namespace = kubernetes_namespace.home_assistant.metadata.0.name
+    namespace = var.namespace
   }
 
   data = {
@@ -108,7 +102,7 @@ resource "kubernetes_manifest" "home_assistant_servicemonitor" {
         "prometheus"                 = "default"
       }
       name      = var.chart_name
-      namespace = kubernetes_namespace.home_assistant.metadata.0.name
+      namespace = var.namespace
     }
 
     spec = {

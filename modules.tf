@@ -33,7 +33,7 @@ module "home_assistant" {
   source = "./modules/home_assistant"
 
   chart_version = "11.2.1"
-  namespace     = "home-assistant"
+  namespace     = kubernetes_namespace.home_assistant.metadata.0.name
   chart_name    = "home-assistant"
 
   enable_host_network = true
@@ -48,7 +48,7 @@ module "node_red" {
 
   chart_name    = "node-red"
   chart_version = "9.1.0"
-  namespace     = "node-red"
+  namespace     = kubernetes_namespace.home_assistant.metadata.0.name
   domain        = var.external_domain
 }
 
@@ -121,12 +121,12 @@ module "kured" {
 }
 
 module "grafana_operator" {
-  count = true ? 1 : 0
+  count = false ? 1 : 0
 
   source                               = "./modules/grafana_operator"
-  grafana_operator_namespace           = "grafana"
-  grafana_operator_chart_repository    = "grafana-operator"
-  grafana_operator_chart_version       = "1.5.3"
+  namespace                            = kubernetes_namespace.grafana.metadata.0.name
+  chart_repository                     = "grafana-operator"
+  chart_version                        = "1.5.3"
   grafana_ingress_host                 = "grafana-op.${var.external_domain}"
   grafana_data_source_url              = "http://prometheus-operator-kube-p-prometheus.monitoring.svc:9090"
   grafana_data_source_url_alertmanager = "http://prometheus-operator-kube-p-alertmanager.monitoring.svc:9093"

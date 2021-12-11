@@ -1,9 +1,3 @@
-resource "kubernetes_namespace" "node_red" {
-  metadata {
-    name = var.namespace
-  }
-}
-
 resource "kubernetes_persistent_volume" "node_red" {
   metadata {
     name = "node-red-local-storage-pv"
@@ -35,7 +29,7 @@ resource "kubernetes_persistent_volume" "node_red" {
 
 resource "helm_release" "node_red" {
   name       = var.chart_name
-  namespace  = kubernetes_namespace.node_red.metadata[0].name
+  namespace  = var.namespace
   repository = "https://k8s-at-home.com/charts/"
   chart      = var.chart_name
   version    = var.chart_version

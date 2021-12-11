@@ -1,7 +1,7 @@
 resource "kubernetes_secret" "prometheus_alertmanager_plugin" {
   metadata {
     name      = "prometheus-alertmanager-plugin"
-    namespace = var.grafana_operator_namespace
+    namespace = var.namespace
   }
   data = {
     GF_INSTALL_PLUGINS = "camptocamp-prometheus-alertmanager-datasource"
@@ -38,11 +38,11 @@ resource "kubernetes_persistent_volume" "grafana_operator" {
 }
 
 resource "helm_release" "grafana_operator" {
-  name       = var.grafana_operator_name
-  namespace  = var.grafana_operator_namespace
+  name       = var.name
+  namespace  = var.namespace
   repository = "https://charts.bitnami.com/bitnami"
-  chart      = var.grafana_operator_chart_repository
-  version    = var.grafana_operator_chart_version
+  chart      = var.chart_repository
+  version    = var.chart_version
   values = [
     templatefile("${path.module}/grafana_operator.yaml", {
       grafana_ingress_url           = var.grafana_ingress_host

@@ -1,20 +1,20 @@
-variable "grafana_operator_name" {
+variable "name" {
   type        = string
   default     = "grafana-operator"
   description = "Name of the helm release"
 }
 
-variable "grafana_operator_namespace" {
+variable "namespace" {
   type        = string
   description = "It specify the grafana-operator namespace where the grafana-operator will deployed"
 }
 
-variable "grafana_operator_chart_version" {
+variable "chart_version" {
   type        = string
   description = "This will specify the grafana-operator chart version"
 }
 
-variable "grafana_operator_chart_repository" {
+variable "chart_repository" {
   type        = string
   description = "It specifies the chart repository of grafana-operator chart"
 }
