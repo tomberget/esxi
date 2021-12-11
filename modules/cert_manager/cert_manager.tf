@@ -1,15 +1,6 @@
-resource "kubernetes_namespace" "cert_manager" {
-  metadata {
-    name = var.namespace
-
-    labels = {
-    }
-  }
-}
-
 resource "helm_release" "cert_manager" {
   name       = var.chart_name
-  namespace  = kubernetes_namespace.cert_manager.metadata[0].name
+  namespace  = var.namespace
   repository = "https://charts.jetstack.io"
   chart      = var.chart_name
   version    = var.chart_version

@@ -1,14 +1,3 @@
-resource "kubernetes_namespace" "pihole" {
-  metadata {
-    name = var.namespace
-
-    labels = {
-      "istio-injection"    = "disabled"
-      "kiali.io/member-of" = "istio-system"
-    }
-  }
-}
-
 resource "random_password" "pihole" {
   length           = 16
   special          = true
@@ -18,7 +7,7 @@ resource "random_password" "pihole" {
 resource "kubernetes_secret" "pihole" {
   metadata {
     name      = "password"
-    namespace = kubernetes_namespace.pihole.metadata[0].name
+    namespace = var.namespace
   }
 
   data = {
@@ -30,7 +19,7 @@ resource "kubernetes_secret" "pihole" {
 
 resource "helm_release" "pihole" {
   name       = var.chart_name
-  namespace  = kubernetes_namespace.pihole.metadata[0].name
+  namespace  = var.namespace
   repository = "https://mojo2600.github.io/pihole-kubernetes/"
   chart      = var.chart_name
   version    = var.chart_version
