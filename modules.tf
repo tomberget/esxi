@@ -32,7 +32,7 @@ module "monitoring" {
 module "home_assistant" {
   source = "./modules/home_assistant"
 
-  chart_version = "11.2.1"
+  chart_version = "12.0.1"
   namespace     = kubernetes_namespace.home_assistant.metadata.0.name
   chart_name    = "home-assistant"
 
