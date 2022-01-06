@@ -23,7 +23,6 @@ ingress:
     enabled: true
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-issuer
-      # nginx.ingress.kubernetes.io/backend-protocol: HTTPS
       nginx.org/websocket-services: home-assistant
     ingressClassName: nginx
     hosts:

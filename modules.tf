@@ -47,7 +47,7 @@ module "node_red" {
   source = "./modules/node_red"
 
   chart_name    = "node-red"
-  chart_version = "9.1.0"
+  chart_version = "10.0.0"
   namespace     = kubernetes_namespace.home_assistant.metadata.0.name
   domain        = var.external_domain
 }
