@@ -2,21 +2,27 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-serviceWeb:
-  http:
-    enabled: true
-  https:
-    enabled: true
-
+# -- Configuration for the DNS service on port 53
 serviceDns:
   loadBalancerIP: ${metallb_pihole_ip}
+  type: LoadBalancer
   annotations:
     metallb.universe.tf/allow-shared-ip: pihole-svc
-  type: LoadBalancer
 
+# -- Configuration for the DHCP service on port 67
 serviceDhcp:
   enabled: false
 
+# -- Configuration for the web interface service
+serviceWeb:
+  http:
+   enabled: true
+  https:
+    enabled: true
+
+# virtualHost: pi.hole
+
+# -- Configuration for the Ingress
 ingress:
   enabled: true
   ingressClassName: nginx
@@ -34,41 +40,26 @@ ingress:
     #- virtualHost (default value is pi.hole) will be appended to the hosts
       - ${ingress_host}
 
+# -- `spec.PersitentVolumeClaim` configuration
 persistentVolumeClaim:
-  # set to true to use pvc
-  enabled: false
-  # set to true to use you own pvc
-  # existingClaim: myExistingClaim
-  annotations: {}
-
+  # -- set to true to use pvc
+  enabled: $(enable_persistent_volume)
   accessModes:
     - ReadWriteOnce
   size: "500Mi"
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
   storageClass: "local-storage"
 
   ## If subPath is set mount a sub folder of a volume instead of the root of the volume.
   ## This is especially handy for volume plugins that don't natively support sub mounting (like glusterfs).
 
-  # subPath: "pihole"
+  # subPath: "subpath"
 
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
-
-# Use an existing secret for the admin password.
+# -- Use an existing secret for the admin password.
 admin:
   existingSecret: ${secret_name}
   passwordKey: "password"
 
-# extraEnvironmentVars is a list of extra enviroment variables to set for pihole to use
+# -- extraEnvironmentVars is a list of extra enviroment variables to set for pihole to use
 extraEnvVars:
   TZ: "Europe/Oslo"
 
@@ -77,69 +68,101 @@ DNS1: "1.1.1.2"
 # -- default upstream DNS 2 server to use
 DNS2: "8.8.8.8"
 
-antiaff:
-  # set to true to enable antiaffinity (example: 2 pihole DNS in the same cluster)
-  enabled: false
-  # Here you can set the pihole release (you set in `helm install <releasename> ...`)
-  # you want to avoid
-  avoidRelease: pihole1
-  # Here you can choose between preferred or required
-  strict: true
-
 dnsmasq:
-  upstreamServers:
-  # Here you can add upstream dns servers with. All lines will be added to the
-  # pihole dnsmasq configuration.
-  # The format should be like:
+  # -- Add upstream dns servers. All lines will be added to the pihole dnsmasq configuration
+  upstreamServers: []
   # - server=/foo.bar/192.168.178.10
   # - server=/bar.foo/192.168.178.11
 
+  # -- Add custom dns entries to override the dns resolution. All lines will be added to the pihole dnsmasq configuration.
   customDnsEntries: []
-  # Here you can add custom dns entries to override the
-  # dns resolution with. All lines will be added to the
-  # pihole dnsmasq configuration.
-  # The format should be like:
   # - address=/foo.bar/192.168.178.10
   # - address=/bar.foo/192.168.178.11
 
+  # -- Dnsmasq reads the /etc/hosts file to resolve ips. You can add additional entries if you like
   additionalHostsEntries: []
-  # Dnsmasq reads the /etc/hosts file to resolve ips. You can add additional entries if you like
   # - 192.168.0.3     host4
   # - 192.168.0.4     host5
 
+  # -- Static DHCP config
   staticDhcpEntries: []
-  # Static DHCP config
   # staticDhcpEntries:
   # - dhcp-host=MAC_ADDRESS,IP_ADDRESS,HOSTNAME
 
+  # -- Other options
+  customSettings:
+  # otherSettings:
+  # - rebind-domain-ok=/plex.direct/
+
+  # -- Here we specify custom cname entries that should point to `A` records or
+  # elements in customDnsEntries array.
+  # The format should be:
+  #  - cname=cname.foo.bar,foo.bar
+  #  - cname=cname.bar.foo,bar.foo
+  #  - cname=cname record,dns record
+  customCnameEntries: []
+  # Here we specify custom cname entries that should point to `A` records or
+  # elements in customDnsEntries array.
+  # The format should be:
+  #   - cname=cname.foo.bar,foo.bar
+  #   - cname=cname.bar.foo,bar.foo
+  #   - cname=cname record,dns record
+
+# -- list of adlists to import during initial start of the container
 adlists: {}
   # If you want to provide blocklists, add them here.
   # - https://hosts-file.net/grm.txt
   # - https://reddestdream.github.io/Projects/MinimalHosts/etc/MinimalHostsBlocker/minimalhosts
 
+# -- list of whitelisted domains to import during initial start of the container
 whitelist: {}
-  # If you want to have special domains whitelisted, add them here
-  # - *.whitelist.com
+  # If you want to provide whitelisted domains, add them here.
+  # - clients4.google.com
 
+# -- list of blacklisted domains to import during initial start of the container
 blacklist: {}
   # If you want to have special domains blacklisted, add them here
   # - *.blackist.com
 
+# -- list of blacklisted regex expressions to import during initial start of the container
 regex: {}
   # Add regular expression blacklist items
   # - (^|\.)facebook\.com$
 
-ftl: {}
+# -- values that should be added to pihole-FTL.conf
+ftl:
   # Add values for pihole-FTL.conf
   # MAXDBDAYS: 14
 
 # -- should container run in privileged mode
 privileged: "false"
 
+# -- any extra volumes you might want
+extraVolumes: {}
+  # external-conf:
+  #   configMap:
+  #     name: pi-hole-lighttpd-external-conf
+
+# -- any extra volume mounts you might want
+extraVolumeMounts: {}
+  # external-conf:
+  #   mountPath: /etc/lighttpd/external.conf
+  #   subPath: external.conf
+
+# -- Additional annotations for pods
+podAnnotations:
+  # Example below allows Prometheus to scape on metric port (requires pihole-exporter sidecar enabled)
+  prometheus.io/port: '9617'
+  prometheus.io/scrape: 'true'
+
 monitoring:
+  # -- Preferably adding prometheus scrape annotations rather than enabling podMonitor.
   podMonitor:
-    enabled: true
+    # -- set this to true to enable podMonitor
+    enabled: false
+  # -- Sidecar configuration
   sidecar:
+    # -- set this to true to enable podMonitor as sidecar
     enabled: true
     port: 9617
     resources:
@@ -154,4 +177,5 @@ podDnsConfig:
   policy: "None"
   nameservers:
   - 127.0.0.1
+  - 192.168.79.1
   - 1.1.1.2
