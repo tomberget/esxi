@@ -4,7 +4,7 @@ module "cilium" {
   source = "./modules/cilium"
 
   chart_name    = "cilium"
-  chart_version = "1.11.0"
+  chart_version = "1.11.1"
   namespace     = "kube-system"
 
   domain = var.external_domain
