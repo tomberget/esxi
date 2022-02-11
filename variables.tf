@@ -38,19 +38,6 @@ variable "metallb_ingress_nginx_ip_hostnum" {
   type    = number
 }
 
-# vSphere variables
-variable "esxi_hosts" {
-  default = ["esxi"]
-}
-
-variable "datacenter_name" {
-  type = string
-}
-
-variable "datastore_name" {
-  type = string
-}
-
 # Sonarqube
 variable "sonar_enabled" {
   description = "Enable or disable the SonarQube module"
