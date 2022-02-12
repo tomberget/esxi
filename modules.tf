@@ -76,8 +76,7 @@ module "pihole" {
   metallb_pihole_ip = cidrhost(var.metallb_network_range, var.metallb_pihole_ip_hostnum)
 
   depends_on = [
-    module.metallb,
-    resource.kubernetes_storage_class.vsphere
+    module.metallb
   ]
 }
 
