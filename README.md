@@ -36,3 +36,18 @@ Use `terraform plan` to validate any changes you have made, and study the plan i
 ```bash
 terraform apply
 ```
+
+## Environmental variables that must be set
+
+In this case, these are the *environmental variables* that must be set in order to be able to run the `terraform apply`.
+
+| Environmental variable | Used for |
+----------------------------------------
+| AWS_ACCESS_KEY_ID | Connecting to AWS and updating the Route53 records |
+| KUBE_CONFIG_PATH | Connecting to Kubernetes |
+| TF_VAR_metallb_network_range | Defining a network range for MetalLB |
+| TF_VAR_ha_metrics_token | Long lived token for connecting Prometheus to Home-Assistant. Will be removed |
+| TF_VAR_email_address | For certificates via cert-manager |
+| TF_VAR_hosted_zone_id | The Hosted Zone Id for Route53 |
+| TF_VAR_domain | Local domain (example.lan) |
+| TF_VAR_external_domain | Domain name used in Route53 (example.com) |
