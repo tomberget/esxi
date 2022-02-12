@@ -66,20 +66,6 @@ module "ingress_nginx" {
   ]
 }
 
-module "traefik" {
-  source = "./modules/traefik"
-
-  chart_name         = "traefik"
-  chart_version      = "10.6.0"
-  namespace          = kubernetes_namespace.traefik.metadata.0.name
-  metallb_traefik_ip = cidrhost(var.metallb_network_range, var.metallb_traefik_ip_hostnum)
-  domain             = var.external_domain
-
-  depends_on = [
-    module.metallb
-  ]
-}
-
 module "pihole" {
   source = "./modules/pihole"
 
