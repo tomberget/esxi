@@ -18,9 +18,7 @@ ingress:
     enabled: true
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-issuer
-      traefik.ingress.kubernetes.io/router.entrypoints: websecure
-      traefik.ingress.kubernetes.io/router.tls: "true"
-    ingressClassName: traefik
+    ingressClassName: nginx
     hosts:
     - host: ${ingress_host}
       paths:

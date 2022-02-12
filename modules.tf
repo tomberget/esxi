@@ -14,19 +14,27 @@ module "metallb" {
   source = "./modules/metallb"
 
   chart_name    = "metallb"
-  chart_version = "2.5.13"
+  chart_version = "2.6.2"
   namespace     = kubernetes_namespace.metallb.metadata.0.name
 
   network_range = var.metallb_network_range
+
+  depends_on = [
+    module.cilium
+  ]
 }
 
 module "monitoring" {
   source = "./modules/monitoring"
 
-  chart_version = "25.2.0"
+  chart_version = "32.2.0"
   namespace     = kubernetes_namespace.monitoring.metadata.0.name
 
   domain = var.external_domain
+
+  depends_on = [
+    module.metallb
+  ]
 }
 
 module "home_assistant" {
@@ -41,6 +49,10 @@ module "home_assistant" {
 
   app_name = "ha"
   domain   = var.external_domain
+
+  depends_on = [
+    module.metallb
+  ]
 }
 
 module "node_red" {
@@ -50,30 +62,20 @@ module "node_red" {
   chart_version = "10.0.0"
   namespace     = kubernetes_namespace.home_assistant.metadata.0.name
   domain        = var.external_domain
-}
-
-module "ingress_nginx" {
-  source = "./modules/ingress_nginx"
-
-  chart_name               = "ingress-nginx"
-  chart_version            = "4.0.13"
-  namespace                = kubernetes_namespace.nginx.metadata.0.name
-  metallb_ingress_nginx_ip = cidrhost(var.metallb_network_range, var.metallb_ingress_nginx_ip_hostnum)
-  domain                   = var.external_domain
 
   depends_on = [
     module.metallb
   ]
 }
 
-module "traefik" {
-  source = "./modules/traefik"
+module "ingress_nginx" {
+  source = "./modules/ingress_nginx"
 
-  chart_name         = "traefik"
-  chart_version      = "10.6.0"
-  namespace          = kubernetes_namespace.traefik.metadata.0.name
-  metallb_traefik_ip = cidrhost(var.metallb_network_range, var.metallb_traefik_ip_hostnum)
-  domain             = var.external_domain
+  chart_name               = "ingress-nginx"
+  chart_version            = "4.0.17"
+  namespace                = kubernetes_namespace.nginx.metadata.0.name
+  metallb_ingress_nginx_ip = cidrhost(var.metallb_network_range, var.metallb_ingress_nginx_ip_hostnum)
+  domain                   = var.external_domain
 
   depends_on = [
     module.metallb
@@ -84,14 +86,13 @@ module "pihole" {
   source = "./modules/pihole"
 
   chart_name        = "pihole"
-  chart_version     = "2.5.3"
+  chart_version     = "2.5.6"
   namespace         = kubernetes_namespace.pihole.metadata.0.name
   domain            = var.external_domain
   metallb_pihole_ip = cidrhost(var.metallb_network_range, var.metallb_pihole_ip_hostnum)
 
   depends_on = [
-    module.metallb,
-    resource.kubernetes_storage_class.vsphere
+    module.metallb
   ]
 }
 
@@ -99,7 +100,7 @@ module "cert_manager" {
   source = "./modules/cert_manager"
 
   chart_name     = "cert-manager"
-  chart_version  = "1.6.1"
+  chart_version  = "1.7.1"
   namespace      = kubernetes_namespace.cert_manager.metadata.0.name
   domain         = var.external_domain
   access_key_id  = var.access_key_id
@@ -116,7 +117,7 @@ module "kured" {
   source = "./modules/kured"
 
   chart_name    = "kured"
-  chart_version = "2.10.2"
+  chart_version = "2.11.2"
   namespace     = "kube-system"
 }
 
@@ -135,4 +136,8 @@ module "grafana_operator" {
   grafana_labels = {
     "grafana" : "dashboard",
   }
+
+  depends_on = [
+    module.metallb
+  ]
 }

@@ -8,9 +8,7 @@ alertmanager:
     enabled: true
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-issuer
-      traefik.ingress.kubernetes.io/router.entrypoints: websecure
-      traefik.ingress.kubernetes.io/router.tls: "true"
-    ingressClassName: traefik
+    ingressClassName: nginx
     hosts:
     - ${alertmanager_ingress_host}
     paths: ["/"]
@@ -105,9 +103,7 @@ prometheus:
     enabled: true
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-issuer
-      traefik.ingress.kubernetes.io/router.entrypoints: websecure
-      traefik.ingress.kubernetes.io/router.tls: "true"
-    ingressClassName: traefik
+    ingressClassName: nginx
     hosts:
     - ${prometheus_ingress_host}
     paths: ["/"]
@@ -149,9 +145,7 @@ grafana:
     enabled: true
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-issuer
-      traefik.ingress.kubernetes.io/router.entrypoints: websecure
-      traefik.ingress.kubernetes.io/router.tls: "true"
-    ingressClassName: traefik
+    ingressClassName: nginx
     hosts:
     - ${grafana_ingress_host}
     paths: ["/"]

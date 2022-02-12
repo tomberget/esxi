@@ -34,7 +34,7 @@ terraform {
     }
   }
 
-  required_version = "~> 1.0.0"
+  required_version = "~> 1.1"
 }
 
 provider "kubernetes" {
@@ -50,9 +50,3 @@ provider "helm" {
 }
 
 provider "random" {}
-
-provider "vsphere" {
-  # If you have a self-signed cert
-  allow_unverified_ssl = true
-
-}
