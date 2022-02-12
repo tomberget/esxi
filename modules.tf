@@ -18,6 +18,10 @@ module "metallb" {
   namespace     = kubernetes_namespace.metallb.metadata.0.name
 
   network_range = var.metallb_network_range
+
+  depends_on = [
+    module.cilium
+  ]
 }
 
 module "monitoring" {
@@ -27,6 +31,10 @@ module "monitoring" {
   namespace     = kubernetes_namespace.monitoring.metadata.0.name
 
   domain = var.external_domain
+
+  depends_on = [
+    module.metallb
+  ]
 }
 
 module "home_assistant" {
@@ -41,6 +49,10 @@ module "home_assistant" {
 
   app_name = "ha"
   domain   = var.external_domain
+
+  depends_on = [
+    module.metallb
+  ]
 }
 
 module "node_red" {
@@ -50,6 +62,10 @@ module "node_red" {
   chart_version = "10.0.0"
   namespace     = kubernetes_namespace.home_assistant.metadata.0.name
   domain        = var.external_domain
+
+  depends_on = [
+    module.metallb
+  ]
 }
 
 module "ingress_nginx" {
@@ -120,4 +136,8 @@ module "grafana_operator" {
   grafana_labels = {
     "grafana" : "dashboard",
   }
+
+  depends_on = [
+    module.metallb
+  ]
 }
