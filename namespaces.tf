@@ -29,12 +29,6 @@ resource "kubernetes_namespace" "nginx" {
   }
 }
 
-resource "kubernetes_namespace" "traefik" {
-  metadata {
-    name = "traefik"
-  }
-}
-
 resource "kubernetes_namespace" "pihole" {
   metadata {
     name = "pihole"
