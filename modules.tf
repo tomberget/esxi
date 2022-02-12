@@ -51,7 +51,8 @@ module "home_assistant" {
   domain   = var.external_domain
 
   depends_on = [
-    module.metallb
+    module.metallb,
+    module.monitoring,
   ]
 }
 
@@ -64,7 +65,7 @@ module "node_red" {
   domain        = var.external_domain
 
   depends_on = [
-    module.metallb
+    module.home_assistant
   ]
 }
 
