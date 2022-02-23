@@ -77,6 +77,7 @@ module "ingress_nginx" {
   namespace                = kubernetes_namespace.nginx.metadata.0.name
   metallb_ingress_nginx_ip = cidrhost(var.metallb_network_range, var.metallb_ingress_nginx_ip_hostnum)
   domain                   = var.external_domain
+  controller_replica       = 3
 
   depends_on = [
     module.metallb

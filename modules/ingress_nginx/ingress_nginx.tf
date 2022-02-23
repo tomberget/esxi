@@ -8,6 +8,7 @@ resource "helm_release" "ingress_nginx" {
   values = [
     templatefile("${path.module}/templates/values.yaml", {
       metallb_traefik_ip = var.metallb_ingress_nginx_ip
+      controller_replica = var.controller_replica
     })
   ]
 }
