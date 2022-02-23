@@ -8,3 +8,6 @@ remote-state-create
 
 # Do not include the dev.log file
 dev.log
+
+# Do not include terraform config file
+.tfconfig
