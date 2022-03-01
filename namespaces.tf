@@ -40,3 +40,9 @@ resource "kubernetes_namespace" "postgres_operator" {
     name = "postgres-operator"
   }
 }
+
+resource "kubernetes_namespace" "keycloak" {
+  metadata {
+    name = "keycloak"
+  }
+}

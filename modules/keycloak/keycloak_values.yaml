@@ -1,0 +1,242 @@
+## Keycloak authentication parameters
+## ref: https://github.com/bitnami/bitnami-docker-keycloak#admin-credentials
+##
+auth:
+  ## @param auth.createAdminUser Create administrator user on boot
+  ##
+  createAdminUser: true
+  ## @param auth.adminUser Keycloak administrator user
+  ##
+  adminUser: user
+  ## @param auth.adminPassword Keycloak administrator password for the new user
+  ##
+  adminPassword: ""
+  ## @param auth.managementUser Wildfly management user
+  ##
+  managementUser: manager
+  ## @param auth.managementPassword Wildfly management password
+  ##
+  managementPassword: ""
+  ## @param auth.existingSecret An already existing secret containing auth info
+  ## e.g:
+  ## existingSecret:
+  ##   name: mySecret
+  ##   keyMapping:
+  ##     admin-password: myPasswordKey
+  ##     management-password: myManagementPasswordKey
+  ##     database-password: myDatabasePasswordKey
+  ##     tls-keystore-password: myTlsKeystorePasswordKey
+  ##     tls-truestore-password: myTlsTruestorePasswordKey
+  ##
+  existingSecret: ""
+  ## @param auth.existingSecretPerPassword Override `existingSecret` and other secret values
+  ## e.g:
+  ## existingSecretPerPassword:
+  ##   keyMapping:
+  ##     adminPassword: KEYCLOAK_ADMIN_PASSWORD
+  ##     managementPassword: KEYCLOAK_MANAGEMENT_PASSWORD
+  ##     databasePassword: password
+  ##     tlsKeystorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
+  ##     tlsTruststorePassword: JKS_KEYSTORE_TRUSTSTORE_PASSWORD
+  ##   adminPassword:
+  ##     name: keycloak-test2.credentials ## release-name
+  ##   managementPassword:
+  ##     name: keycloak-test2.credentials
+  ##   databasePassword:
+  ##     name: keycloak.pocwatt-keycloak-cluster.credentials
+  ##   tlsKeystorePassword:
+  ##     name: keycloak-test2.credentials
+  ##   tlsTruststorePassword:
+  ##     name: keycloak-test2.credentials
+  ##
+  existingSecretPerPassword: {}
+
+## @param configuration Keycloak Configuration. Auto-generated based on other parameters when not specified
+## Specify content for standalone-ha.xml
+## NOTE: This will override configuring Keycloak based on environment variables (including those set by the chart)
+## The standalone-ha.xml is auto-generated based on other parameters when this parameter is not specified
+##
+## Example:
+## configuration: |-
+##    foo: bar
+##    baz:
+##
+configuration: ""
+## @param existingConfigmap Name of existing ConfigMap with Keycloak configuration
+## NOTE: When it's set the configuration parameter is ignored
+##
+existingConfigmap: ""
+## @param extraStartupArgs Extra default startup args
+##
+extraStartupArgs: ""
+## @param initdbScripts Dictionary of initdb scripts
+## Specify dictionary of scripts to be run at first boot
+## ref: https://github.com/bitnami/bitnami-docker-keycloak#initializing-a-new-instance
+## Example:
+## initdbScripts:
+##   my_init_script.sh: |
+##      #!/bin/bash
+##      echo "Do something."
+##
+initdbScripts: {}
+## @param initdbScriptsConfigMap ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)
+##
+initdbScriptsConfigMap: ""
+## @param command Override default container command (useful when using custom images)
+##
+command: []
+## @param args Override default container args (useful when using custom images)
+##
+args: []
+## @param extraEnvVars Extra environment variables to be set on Keycloak container
+## Example:
+## extraEnvVars:
+##   - name: FOO
+##     value: "bar"
+##
+extraEnvVars: []
+## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
+##
+extraEnvVarsSecret: ""
+
+## Keycloak containers' SecurityContext
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+## @param podSecurityContext.enabled Enabled Keykloak pods' Security Context
+## @param podSecurityContext.fsGroup Set Keykloak pod's Security Context fsGroup
+##
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+## Keycloak pods' Security Context
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+## @param containerSecurityContext.enabled Enabled Keykloak containers' Security Context
+## @param containerSecurityContext.runAsUser Set Keykloak container's Security Context runAsUser
+## @param containerSecurityContext.runAsNonRoot Set Keykloak container's Security Context runAsNonRoot
+##
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true
+
+## Service configuration
+##
+service:
+  ## @param service.type Kubernetes service type
+  ##
+  type: ClusterIP
+  ## @param service.port Service HTTP port
+  ##
+  port: 80
+  ## @param service.httpsPort HTTPS Port
+  ##
+  httpsPort: 443
+
+## Keycloak ingress parameters
+## ref: https://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for Keycloak
+  ##
+  enabled: ${keycloak_ingress_enabled}
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: "nginx"
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: ${keycloak_ingress_hostname}
+  ## @param ingress.path Default path for the ingress record
+  ##
+  path: /
+  ## @param ingress.annotations [object] Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Relay on cert-manager to create it by setting the corresponding annotations
+  ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+  ##
+  tls: true
+  ## @param ingress.servicePort Service port to be used
+  ## Default is http. Alternative is https.
+  ##
+  servicePort: https
+
+## @section RBAC parameter
+## Specifies whether a ServiceAccount should be created
+##
+serviceAccount:
+  ## @param serviceAccount.create Enable the creation of a ServiceAccount for Keycloak pods
+  ##
+  create: true
+
+## @section Other parameters
+
+## Metrics configuration
+##
+metrics:
+  ## @param metrics.enabled Enable exposing Keycloak statistics
+  ## ref: https://github.com/bitnami/bitnami-docker-keycloak#enabling-statistics
+  ##
+  enabled: true
+
+  ## Prometheus Operator ServiceMonitor configuration
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor Resource for scraping metrics using PrometheusOperator
+    ##
+    enabled: true
+    ## @param metrics.serviceMonitor.namespace Namespace which Prometheus is running in
+    ##
+    namespace: "monitoring"
+
+## @section Database parameters
+
+## PostgreSQL chart configuration
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+##
+postgresql:
+  ## @param postgresql.enabled Deploy a PostgreSQL server to satisfy the applications database requirements
+  ##
+  enabled: false
+
+## External database configuration
+##
+externalDatabase:
+  ## @param externalDatabase.host Host of the external database
+  ##
+  host: ""
+  ## @param externalDatabase.port Database port
+  ##
+  port: 5432
+  ## @param externalDatabase.user non admin username for Keycloak Database
+  ##
+  user: bn_keycloak
+  ## @param externalDatabase.password Database password
+  ##
+  password: ""
+  ## @param externalDatabase.database Database name
+  ##
+  database: bitnami_keycloak
+  ## @param externalDatabase.existingSecret Use an existing secret file with the external PostgreSQL credentials
+  ##
+  existingSecret: ""
