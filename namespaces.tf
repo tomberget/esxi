@@ -34,3 +34,9 @@ resource "kubernetes_namespace" "pihole" {
     name = "pihole"
   }
 }
+
+resource "kubernetes_namespace" "postgres_operator" {
+  metadata {
+    name = "postgres-operator"
+  }
+}

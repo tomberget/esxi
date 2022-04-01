@@ -33,7 +33,7 @@ module "monitoring" {
   domain = var.external_domain
 
   depends_on = [
-    module.metallb
+    module.ingress_nginx,
   ]
 }
 
@@ -51,7 +51,6 @@ module "home_assistant" {
   domain   = var.external_domain
 
   depends_on = [
-    module.metallb,
     module.monitoring,
   ]
 }
@@ -94,7 +93,7 @@ module "pihole" {
   metallb_pihole_ip = cidrhost(var.metallb_network_range, var.metallb_pihole_ip_hostnum)
 
   depends_on = [
-    module.metallb
+    module.ingress_nginx
   ]
 }
 
@@ -102,7 +101,7 @@ module "cert_manager" {
   source = "./modules/cert_manager"
 
   chart_name     = "cert-manager"
-  chart_version  = "1.7.1"
+  chart_version  = "1.7.2"
   namespace      = kubernetes_namespace.cert_manager.metadata.0.name
   domain         = var.external_domain
   access_key_id  = var.access_key_id
@@ -111,7 +110,7 @@ module "cert_manager" {
   hosted_zone_id = var.hosted_zone_id
 
   depends_on = [
-    module.metallb,
+    module.ingress_nginx,
   ]
 }
 
@@ -140,6 +139,18 @@ module "grafana_operator" {
   }
 
   depends_on = [
-    module.metallb
+    module.ingress_nginx
+  ]
+}
+
+module "postgres_operator" {
+  source                 = "./modules/postgres_operator"
+  namespace              = kubernetes_namespace.postgres_operator.metadata.0.name
+  operator_chart_version = "1.7.1"
+  ui_chart_version       = "1.7.1"
+  ui_ingress_host        = "postgresoperator-ui.${var.external_domain}"
+
+  depends_on = [
+    module.ingress_nginx
   ]
 }
