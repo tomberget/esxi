@@ -101,7 +101,7 @@ module "cert_manager" {
   source = "./modules/cert_manager"
 
   chart_name     = "cert-manager"
-  chart_version  = "1.7.2"
+  chart_version  = "1.8.0"
   namespace      = kubernetes_namespace.cert_manager.metadata.0.name
   domain         = var.external_domain
   access_key_id  = var.access_key_id
