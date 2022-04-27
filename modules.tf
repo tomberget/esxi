@@ -118,7 +118,7 @@ module "kured" {
   source = "./modules/kured"
 
   chart_name    = "kured"
-  chart_version = "2.11.2"
+  chart_version = "2.13.0"
   namespace     = "kube-system"
 }
 
