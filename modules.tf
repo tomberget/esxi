@@ -146,8 +146,8 @@ module "grafana_operator" {
 module "postgres_operator" {
   source                 = "./modules/postgres_operator"
   namespace              = kubernetes_namespace.postgres_operator.metadata.0.name
-  operator_chart_version = "1.7.1"
-  ui_chart_version       = "1.7.1"
+  operator_chart_version = "1.8.0"
+  ui_chart_version       = "1.8.0"
   ui_ingress_host        = "postgresoperator-ui.${var.external_domain}"
 
   depends_on = [
