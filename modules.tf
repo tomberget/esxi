@@ -72,7 +72,7 @@ module "ingress_nginx" {
   source = "./modules/ingress_nginx"
 
   chart_name               = "ingress-nginx"
-  chart_version            = "4.0.17"
+  chart_version            = "4.1.0"
   namespace                = kubernetes_namespace.nginx.metadata.0.name
   metallb_ingress_nginx_ip = cidrhost(var.metallb_network_range, var.metallb_ingress_nginx_ip_hostnum)
   domain                   = var.external_domain
