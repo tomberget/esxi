@@ -1,3 +1,13 @@
+# CRDs
+resource "kubernetes_manifest" "postgres_operator_crd" {
+  for_each = toset(["operatorconfiguration", "postgresql", "postgresteam"])
+  manifest = yamldecode(file("${path.module}/crds/v${var.operator_chart_version}/${each.key}.crd.yaml"))
+
+  field_manager {
+    force_conflicts = true
+  }
+}
+
 # Operator
 resource "helm_release" "postgres_operator" {
   name       = var.name
@@ -8,6 +18,10 @@ resource "helm_release" "postgres_operator" {
   values = [
     templatefile("${path.module}/values.yaml", {
     }),
+  ]
+
+  depends_on = [
+    kubernetes_manifest.postgres_operator_crd,
   ]
 }
 
