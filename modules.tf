@@ -87,7 +87,7 @@ module "pihole" {
   source = "./modules/pihole"
 
   chart_name        = "pihole"
-  chart_version     = "2.5.6"
+  chart_version     = "2.5.8"
   namespace         = kubernetes_namespace.pihole.metadata.0.name
   domain            = var.external_domain
   metallb_pihole_ip = cidrhost(var.metallb_network_range, var.metallb_pihole_ip_hostnum)
