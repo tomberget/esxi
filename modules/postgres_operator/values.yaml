@@ -1,3 +1,6 @@
 configKubernetes:
   # label assigned to Kubernetes objects created by the operator
   cluster_name_label: atarifam-postgres
+
+  # allow user secrets in other namespaces than the Postgres cluster
+  enable_cross_namespace_secret: false

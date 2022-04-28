@@ -273,7 +273,7 @@ controller:
   metrics:
     port: 10254
     # if this port is changed, change healthz-port: in extraArgs: accordingly
-    enabled: false
+    enabled: true
 
     service:
       annotations: {}
@@ -299,7 +299,7 @@ controller:
       additionalLabels: {}
       # The label to use to retrieve the job name from.
       # jobLabel: "app.kubernetes.io/name"
-      namespace: ""
+      namespace: ${namespace}
       namespaceSelector: {}
       # Default: scrape .Release.Namespace only
       # To scrape all, use the following:
