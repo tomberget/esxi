@@ -14,7 +14,7 @@ module "metallb" {
   source = "./modules/metallb"
 
   chart_name    = "metallb"
-  chart_version = "2.6.2"
+  chart_version = "3.0.1"
   namespace     = kubernetes_namespace.metallb.metadata.0.name
 
   network_range = var.metallb_network_range
