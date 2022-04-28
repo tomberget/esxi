@@ -93,6 +93,17 @@ resource "random_password" "grafana" {
   override_special = "_%@"
 }
 
+# Create/Update CRDs
+resource "kubernetes_manifest" "prometheus_operator_crd" {
+  for_each = toset(["alertmanagerconfigs", "alertmanagers", "podmonitors", "probes", "prometheuses", "prometheusrules", "servicemonitors", "thanosrulers"])
+  manifest = yamldecode(file("${path.module}/crds/v${var.operator_version}/monitoring.coreos.com_${each.key}.yaml"))
+
+  field_manager {
+    force_conflicts = true
+  }
+}
+
+
 resource "helm_release" "prometheus_operator" {
   name       = "prometheus-operator"
   namespace  = var.namespace
@@ -113,7 +124,11 @@ resource "helm_release" "prometheus_operator" {
       grafana_org_name     = var.grafana_org_name
       grafana_password     = random_password.grafana.result
 
-      prometheus_operator_create_crd = true
+      prometheus_operator_create_crd = false
     })
+  ]
+
+  depends_on = [
+    kubernetes_manifest.prometheus_operator_crd,
   ]
 }

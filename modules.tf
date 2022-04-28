@@ -27,8 +27,9 @@ module "metallb" {
 module "monitoring" {
   source = "./modules/monitoring"
 
-  chart_version = "32.2.1"
-  namespace     = kubernetes_namespace.monitoring.metadata.0.name
+  chart_version    = "35.0.3"
+  operator_version = "0.56.0"
+  namespace        = kubernetes_namespace.monitoring.metadata.0.name
 
   domain = var.external_domain
 

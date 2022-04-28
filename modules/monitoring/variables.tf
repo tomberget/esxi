@@ -2,10 +2,24 @@ variable "grafana_org_name" {
   default = "ATARIfam"
 }
 
-variable "namespace" {}
-variable "chart_version" {}
+variable "namespace" {
+  default     = "monitoring"
+  type        = string
+  description = "Namespace to deploy the prometheus stack"
+}
+variable "chart_version" {
+  type        = string
+  description = "Chart version for the Prometheus stack"
+}
 
-variable "domain" {}
+variable "domain" {
+  type = string
+}
+
+variable "operator_version" {
+  type        = string
+  description = "Operator version for the Prometheus stack"
+}
 
 variable "ingress_route_list" {
   description = "IngressRoute hostname and service for kube-prom-stack"
