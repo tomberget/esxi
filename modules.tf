@@ -160,7 +160,7 @@ module "keycloak" {
   source                               = "./modules/keycloak"
   namespace                            = kubernetes_namespace.keycloak.metadata.0.name
   chart_repository                     = "bitnami/keycloak"
-  chart_version                        = "6.2.4"
+  chart_version                        = "7.1.18"
   keycloak_ingress_host                = "keycloak.${var.external_domain}"
 
   depends_on = [
