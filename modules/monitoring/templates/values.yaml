@@ -35,7 +35,6 @@ prometheusOperator:
   configReloaderCpu: 130m
   resources:
     limits:
-      cpu: 700m
       memory: 256Mi
     requests:
       cpu: 700m
@@ -43,7 +42,6 @@ prometheusOperator:
   tlsProxy:
     resources:
       limits:
-        cpu: 50m
         memory: 50Mi
       requests:
         cpu: 50m
@@ -84,13 +82,14 @@ prometheus:
             action: replace
             target_label: pod_name
     podMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelector: {}
     serviceMonitorSelectorNilUsesHelmValues: false
-    serviceMonitorSelector:
-      matchLabels:
-        prometheus: default
-    ruleSelector:
-      matchLabels:
-        alertmanager: default
+    serviceMonitorSelector: {}
+      # matchLabels:
+      #   prometheus: default
+    ruleSelector: {}
+      # matchLabels:
+      #   alertmanager: default
     storageSpec:
       volumeClaimTemplate:
         spec:

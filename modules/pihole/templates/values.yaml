@@ -167,10 +167,10 @@ monitoring:
     port: 9617
     resources:
       limits:
+        memory: 256Mi
+      requests:
+        cpu: 100m
         memory: 128Mi
-      # requests:
-      #  cpu: 100m
-      #  memory: 128Mi
 
 podDnsConfig:
   enabled: true
