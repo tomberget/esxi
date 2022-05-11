@@ -63,3 +63,25 @@ variable "hosted_zone_id" {
   description = "Hosted zone id for Route53"
   type        = string
 }
+
+# Keycloak variables
+variable "keycloak_enabled" {
+  default = true
+}
+
+# variable "keycloak_host_name" {}
+
+variable "keycloak_external_database_enabled" {
+  default = true
+}
+
+variable "keycloak_ha_enabled" {
+  description = "Killswitch to enable or disable high availability for keycloak"
+  type        = bool
+  default     = false
+}
+
+# Keycloak external postgres database
+variable "keycloak_postgres_enabled" {
+  default = true
+}

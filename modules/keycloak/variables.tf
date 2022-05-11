@@ -14,12 +14,7 @@ variable "chart_version" {
   description = "This will specify the grafana-operator chart version"
 }
 
-variable "chart_repository" {
-  type        = string
-  description = "It specifies the chart repository of grafana-operator chart"
-}
-
-variable "keycloak_ingress_host" {
+variable "ingress_host_name" {
   type        = string
   description = "This will specify the ingress url"
 }
