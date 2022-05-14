@@ -1,17 +1,17 @@
-resource "helm_release" "grafana_operator" {
+resource "helm_release" "keycloak" {
   name       = var.name
   namespace  = var.namespace
   repository = "https://charts.bitnami.com/bitnami"
-  chart      = var.chart_repository
+  chart      = var.name
   version    = var.chart_version
+
   values = [
-    templatefile("${path.module}/grafana_operator.yaml", {
-      grafana_ingress_url           = var.grafana_ingress_host
-      grafana_ingress_tls           = "${replace(var.grafana_ingress_host, ".", "-")}-tls"
-      prometheus_data_source_url    = var.grafana_data_source_url
-      alertmanager_data_source_url  = var.grafana_data_source_url_alertmanager
-      prometheus_data_source_access = var.grafana_data_source_access
-      grafana_labels                = indent(4, yamlencode(var.grafana_labels))
+    templatefile("${path.module}/keycloak_values.yaml", {
+      ingress_hostname      = var.ingress_hostname
+      external_database_host = var.external_database_host
+      external_database_username = var.external_database_username
+      external_database_password = var.external_database_password
+      ha_enabled             = var.ha_enabled
     }),
   ]
 }

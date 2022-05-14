@@ -17,6 +17,10 @@ variable "external_domain" {
   type        = string
 }
 
+variable "nfs_server" {
+  description = "NFS server to mount the persistent volume"
+  type        = string
+}
 
 variable "metallb_network_range" {
   type = string
@@ -69,10 +73,14 @@ variable "keycloak_enabled" {
   default = true
 }
 
-# variable "keycloak_host_name" {}
-
 variable "keycloak_external_database_enabled" {
   default = true
+}
+
+variable "postgres_team" {
+  description = "Postgres team name"
+  type        = string
+  default     = "athome"
 }
 
 variable "keycloak_ha_enabled" {

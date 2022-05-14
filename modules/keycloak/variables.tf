@@ -1,20 +1,36 @@
 variable "name" {
   type        = string
-  default     = "grafana-operator"
+  default     = "keycloak"
   description = "Name of the helm release"
 }
 
 variable "namespace" {
   type        = string
-  description = "It specify the grafana-operator namespace where the grafana-operator will deployed"
+  description = "It specify the Keycloak namespace where Keycloak will deployed"
 }
 
 variable "chart_version" {
   type        = string
-  description = "This will specify the grafana-operator chart version"
+  description = "This will specify the Keycloak chart version"
 }
 
-variable "ingress_host_name" {
+variable "ingress_hostname" {
   type        = string
   description = "This will specify the ingress url"
+}
+
+variable "external_database_host" {
+
+}
+
+variable "external_database_username" {
+
+}
+
+variable "external_database_password" {
+
+}
+
+variable "ha_enabled" {
+
 }

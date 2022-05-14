@@ -24,7 +24,7 @@ resource "kubernetes_persistent_volume" "postgres_db" {
     persistent_volume_source {
       nfs {
         server = var.nfs_server
-        path = format("/mnt/default/kubernetes/postgres/%s", local.name)
+        path   = format("/mnt/default/kubernetes/postgres/%s", local.name)
       }
     }
   }

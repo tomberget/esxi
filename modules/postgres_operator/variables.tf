@@ -32,5 +32,5 @@ variable "ui_ingress_host" {
 variable "teams" {
   description = "ATARIFAM teams"
   type        = list(string)
-  default     = ["atarifam"]
+  default     = ["athome"]
 }
