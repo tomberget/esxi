@@ -1,5 +1,7 @@
 # Keycloak PostgreSQL Database
 module "postgres_keycloak_db" {
+  count = var.keycloak_enabled ? 1 : 0
+
   source = "./modules/postgres_db"
 
   name       = "keycloak"

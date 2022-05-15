@@ -9,25 +9,15 @@ locals {
   database    = element(keys(var.databases), 0)
 }
 
-resource "kubernetes_persistent_volume" "postgres_db" {
-  metadata {
-    name = local.name
-  }
-  spec {
-    capacity = {
-      storage = var.volume_size
-    }
+module "postgres_db_pv" {
+  source = "../persistent_volume"
 
-    access_modes       = ["ReadWriteOnce"]
-    storage_class_name = "local-storage"
+  name = local.name
+  labels = local.labels
+  volume_size  = var.volume_size
 
-    persistent_volume_source {
-      nfs {
-        server = var.nfs_server
-        path   = format("/mnt/default/kubernetes/postgres/%s", local.name)
-      }
-    }
-  }
+  preexisting_subpath = "postgres/keycloak"
+  nfs_server = var.nfs_server
 }
 
 resource "kubernetes_manifest" "postgres_db" {
@@ -98,7 +88,7 @@ resource "kubernetes_manifest" "postgres_db" {
       enableConnectionPooler    = var.enable_connection_pooler
       volume = {
         size         = var.volume_size
-        storageClass = kubernetes_persistent_volume.postgres_db.spec[0].storage_class_name
+        storageClass = module.postgres_db_pv.storage_class_name
       }
       users     = var.users
       databases = var.databases
