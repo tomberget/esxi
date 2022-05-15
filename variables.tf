@@ -17,6 +17,10 @@ variable "external_domain" {
   type        = string
 }
 
+variable "nfs_server" {
+  description = "NFS server to mount the persistent volume"
+  type        = string
+}
 
 variable "metallb_network_range" {
   type = string
@@ -62,4 +66,30 @@ variable "region" {
 variable "hosted_zone_id" {
   description = "Hosted zone id for Route53"
   type        = string
+}
+
+# Keycloak variables
+variable "keycloak_enabled" {
+  default = true
+}
+
+variable "keycloak_external_database_enabled" {
+  default = true
+}
+
+variable "postgres_team" {
+  description = "Postgres team name"
+  type        = string
+  default     = "athome"
+}
+
+variable "keycloak_ha_enabled" {
+  description = "Killswitch to enable or disable high availability for keycloak"
+  type        = bool
+  default     = false
+}
+
+# Keycloak external postgres database
+variable "keycloak_postgres_enabled" {
+  default = true
 }
