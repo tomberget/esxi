@@ -586,6 +586,16 @@ spec:
                         - SUPERUSER
                         - nosuperuser
                         - NOSUPERUSER
+                usersWithSecretRotation:
+                  type: array
+                  nullable: true
+                  items:
+                    type: string
+                usersWithInPlaceSecretRotation:
+                  type: array
+                  nullable: true
+                  items:
+                    type: string
                 usersWithPasswordRotation:
                   type: array
                   nullable: true
