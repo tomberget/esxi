@@ -12,12 +12,12 @@ locals {
 module "postgres_db_pv" {
   source = "../persistent_volume"
 
-  name = local.name
-  labels = local.labels
-  volume_size  = var.volume_size
+  name        = local.name
+  labels      = local.labels
+  volume_size = var.volume_size
 
   preexisting_subpath = "postgres/keycloak"
-  nfs_server = var.nfs_server
+  nfs_server          = var.nfs_server
 }
 
 resource "kubernetes_manifest" "postgres_db" {

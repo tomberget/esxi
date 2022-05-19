@@ -1,6 +1,6 @@
 resource "kubernetes_persistent_volume" "persistent_volume" {
   metadata {
-    name = var.name
+    name   = var.name
     labels = var.labels
   }
 
@@ -11,6 +11,11 @@ resource "kubernetes_persistent_volume" "persistent_volume" {
 
     access_modes       = var.access_modes
     storage_class_name = "local-storage"
+
+    mount_options = [
+      "nfsvers=3",
+      "noatime",
+    ]
 
     persistent_volume_source {
       nfs {
