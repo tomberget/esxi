@@ -92,6 +92,7 @@ module "pihole" {
   namespace         = kubernetes_namespace.pihole.metadata.0.name
   domain            = var.external_domain
   metallb_pihole_ip = cidrhost(var.metallb_network_range, var.metallb_pihole_ip_hostnum)
+  nfs_server        = var.nfs_server
 
   depends_on = [
     module.ingress_nginx

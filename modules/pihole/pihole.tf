@@ -1,3 +1,9 @@
+locals {
+  labels = {
+    "app" = "pihole"
+  }
+}
+
 resource "random_password" "pihole" {
   length           = 16
   special          = true
@@ -17,43 +23,15 @@ resource "kubernetes_secret" "pihole" {
   type = "opaque"
 }
 
-resource "kubernetes_persistent_volume" "pihole" {
-  count = var.enable_persistent_volume ? 1 : 0
+module "persistent_volume" {
+  source = "../persistent_volume"
 
-  metadata {
-    name = "pihole-local-storage-pv"
-  }
-  spec {
-    capacity = {
-      storage = "500Mi"
-    }
-    access_modes       = ["ReadWriteOnce"]
-    storage_class_name = "local-storage"
-    mount_options = [
-      "nfsvers=3",
-      "noatime",
-      "nolock",
-      "all_squash",
-      "anonuid=1000",
-      "anongid=65533",
-    ]
-    persistent_volume_source {
-      local {
-        path = "/mnt/kubeshare/pihole"
-      }
-    }
-    node_affinity {
-      required {
-        node_selector_term {
-          match_expressions {
-            key      = "kubernetes.io/hostname"
-            operator = "In"
-            values   = ["k8node1", "k8node2"]
-          }
-        }
-      }
-    }
-  }
+  name        = var.chart_name
+  labels      = local.labels
+  volume_size = "500Mi"
+
+  preexisting_subpath = "pihole"
+  nfs_server          = var.nfs_server
 }
 
 resource "helm_release" "pihole" {
@@ -73,5 +51,5 @@ resource "helm_release" "pihole" {
     })
   ]
 
-  depends_on = [kubernetes_persistent_volume.pihole]
+  depends_on = [module.persistent_volume]
 }
