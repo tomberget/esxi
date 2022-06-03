@@ -126,7 +126,7 @@ grafana:
     storageClassName: local-storage
     accessModes:
       - ReadWriteOnce
-    size: 7Gi
+    size: 5Gi
   env:
     GF_AUTH_ANONYMOUS_ENABLED: "true"
     GF_AUTH_ANONYMOUS_ORG_NAME: ${grafana_org_name}

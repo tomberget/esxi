@@ -35,6 +35,9 @@ module "monitoring" {
 
   depends_on = [
     module.ingress_nginx,
+    module.persistent_volume["alertmanager"],
+    module.persistent_volume["prometheus"],
+    module.persistent_volume["grafana"],
   ]
 }
 
