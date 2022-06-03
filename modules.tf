@@ -53,6 +53,7 @@ module "home_assistant" {
 
   depends_on = [
     module.monitoring,
+    module.persistent_volume["home-assistant"],
   ]
 }
 
@@ -65,7 +66,8 @@ module "node_red" {
   domain        = var.external_domain
 
   depends_on = [
-    module.home_assistant
+    module.home_assistant,
+    module.persistent_volume["node-red"],
   ]
 }
 
@@ -92,10 +94,10 @@ module "pihole" {
   namespace         = kubernetes_namespace.pihole.metadata.0.name
   domain            = var.external_domain
   metallb_pihole_ip = cidrhost(var.metallb_network_range, var.metallb_pihole_ip_hostnum)
-  nfs_server        = var.nfs_server
 
   depends_on = [
-    module.ingress_nginx
+    module.ingress_nginx,
+    module.persistent_volume["pihole"],
   ]
 }
 

@@ -1,9 +1,3 @@
-locals {
-  labels = {
-    "app" = "pihole"
-  }
-}
-
 resource "random_password" "pihole" {
   length           = 16
   special          = true
@@ -23,17 +17,6 @@ resource "kubernetes_secret" "pihole" {
   type = "opaque"
 }
 
-module "persistent_volume" {
-  source = "../persistent_volume"
-
-  name        = var.chart_name
-  labels      = local.labels
-  volume_size = "500Mi"
-
-  preexisting_subpath = "pihole"
-  nfs_server          = var.nfs_server
-}
-
 resource "helm_release" "pihole" {
   name       = var.chart_name
   namespace  = var.namespace
@@ -50,6 +33,4 @@ resource "helm_release" "pihole" {
       enable_persistent_volume = var.enable_persistent_volume
     })
   ]
-
-  depends_on = [module.persistent_volume]
 }

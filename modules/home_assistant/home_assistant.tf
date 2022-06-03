@@ -1,36 +1,3 @@
-resource "kubernetes_persistent_volume" "home_assistant" {
-  metadata {
-    name = "home-assistant-local-storage-pv"
-    labels = {
-      "app.kubernetes.io/instance" = "home-assistant"
-      "app.kubernetes.io/name"     = "home-assistant"
-    }
-  }
-  spec {
-    capacity = {
-      storage = "5Gi"
-    }
-    access_modes       = ["ReadWriteOnce"]
-    storage_class_name = "local-storage"
-    persistent_volume_source {
-      local {
-        path = "/mnt/kubeshare/home-assistant"
-      }
-    }
-    node_affinity {
-      required {
-        node_selector_term {
-          match_expressions {
-            key      = "kubernetes.io/hostname"
-            operator = "In"
-            values   = ["k8node1", "k8node2"]
-          }
-        }
-      }
-    }
-  }
-}
-
 resource "helm_release" "home_assistant" {
   name       = var.chart_name
   namespace  = var.namespace
@@ -47,8 +14,6 @@ resource "helm_release" "home_assistant" {
       service_name        = var.chart_name
     })
   ]
-
-  depends_on = [kubernetes_persistent_volume.home_assistant]
 }
 
 resource "kubernetes_secret" "prometheus" {
