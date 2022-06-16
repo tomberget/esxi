@@ -162,14 +162,17 @@ module "postgres_operator" {
   ]
 }
 
-# module "keycloak" {
-#   source                               = "./modules/keycloak"
-#   namespace                            = kubernetes_namespace.keycloak.metadata.0.name
-#   chart_repository                     = "bitnami/keycloak"
-#   chart_version                        = var.keycloak_chart_version
-#   keycloak_ingress_host                = "keycloak.${var.external_domain}"
+module "mealie" {
+  source = "./modules/mealie"
 
-#   depends_on = [
-#     module.metallb
-#   ]
-# }
+  chart_version = var.mealie_chart_version
+  namespace     = kubernetes_namespace.mealie.metadata.0.name
+  chart_name    = "mealie"
+
+  domain = var.external_domain
+
+  depends_on = [
+    module.ingress_nginx,
+    module.persistent_volume["mealie"],
+  ]
+}

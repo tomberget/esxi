@@ -10,6 +10,10 @@ variable "home_assistant_chart_version" {
   default = "13.0.2"
 }
 
+variable "mealie_chart_version" {
+  default = "5.0.1"
+}
+
 variable "grafana_operator_chart_version" {
   default = "1.5.3"
 }
