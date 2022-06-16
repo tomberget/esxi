@@ -86,7 +86,7 @@ variable "postgres_team" {
 variable "keycloak_ha_enabled" {
   description = "Killswitch to enable or disable high availability for keycloak"
   type        = bool
-  default     = false
+  default     = true
 }
 
 # Keycloak external postgres database

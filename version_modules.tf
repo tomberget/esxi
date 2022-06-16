@@ -23,7 +23,7 @@ variable "ingress_nginx_chart_version" {
 }
 
 variable "keycloak_chart_version" {
-  default = "8.0.2"
+  default = "9.2.10"
 }
 
 variable "kube_prometheus_stack_versions" {
