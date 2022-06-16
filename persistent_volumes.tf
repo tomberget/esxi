@@ -57,6 +57,15 @@ locals {
       volume_size  = "5Gi"
       leading_path = "monitoring/"
     }
+    "mealie" = {
+      labels = {
+        "app.kubernetes.io/instance" = "mealie"
+        "app.kubernetes.io/name"     = "mealie"
+      }
+
+      volume_size  = "10Gi"
+      leading_path = ""
+    }
   }
 }
 

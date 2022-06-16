@@ -1,4 +1,3 @@
-
 resource "kubernetes_namespace" "cert_manager" {
   metadata {
     name = "cert-manager"
@@ -44,5 +43,11 @@ resource "kubernetes_namespace" "postgres_operator" {
 resource "kubernetes_namespace" "keycloak" {
   metadata {
     name = "keycloak"
+  }
+}
+
+resource "kubernetes_namespace" "mealie" {
+  metadata {
+    name = "mealie"
   }
 }
