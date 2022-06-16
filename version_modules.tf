@@ -50,5 +50,5 @@ variable "pihole_chart_version" {
 }
 
 variable "postgres_operator_chart_version" {
-  default = "1.8.0"
+  default = "1.8.1"
 }

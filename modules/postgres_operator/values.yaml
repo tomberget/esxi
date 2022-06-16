@@ -1,3 +1,6 @@
+configGeneral:
+  enable_crd_registration: false
+
 configKubernetes:
   # label assigned to Kubernetes objects created by the operator
   cluster_name_label: atarifam-postgres
